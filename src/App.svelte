@@ -1,12 +1,13 @@
 <script>
-	import StockLineChart from "./components/StockLineChart.svelte"
-	import PopulationMap from "./components/PopulationMap.svelte"	
+	import GenerationLineChart from "./components/GenerationLineChart.svelte";
 </script>
 
 <main>
 	<h1 x="50" >Visual Analytics Final Project: Team 7</h1>
 	<div id="container">
-		<div id="sidebar">
+
+		<div id="map-view">
+
 			<div id="projection-view" class="view-panel">
 				<div class="view-title">Projection View</div>
 				<svg class="imagedot">
@@ -16,17 +17,27 @@
 			
 		</div>
 
-		<div id="main-section" x="80" y="80">
-			<div id="selected-image-view" class="view-panel">
+		<div id="sub-section" x="80" y="80">
+
+			<div id="generation-state-view" class="view-panel">
 				<div class="view-title" y="40">Selected Image</div>
+
 				<div id="selected-image-view-content" >
+
 					<svg ></svg>
+
 				</div>
+
 			</div>
-			<div id="score-distributions-view" class="view-panel">
-				<div class="view-title">Score Distributions</div>
+
+			<div id="generation-state-resource-view" class="view-panel">
+
+				<div class="view-title">Generation for States by Resource</div>
+
+				<GenerationLineChart />
 				
 			</div>
+
 		</div>
 	</div>
 </main>
