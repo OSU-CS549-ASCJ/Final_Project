@@ -136,7 +136,7 @@
 									})
 					.on("mousemove", function(event, record) {
 										Tooltip
-										.html(record.STATE + " " + selectedYear + "/" + record.MONTH + " Gneration: " + record.GENERATION)
+										.html(record.STATE + " " + selectedYear + "/" + record.MONTH + " Generation: " + record.GENERATION)
 										.style("left", `${event.layerX+10}px`)
 										.style("top", `${event.layerY}px`)
 									})

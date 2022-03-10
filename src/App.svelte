@@ -1,18 +1,20 @@
 <script>
+	import GenerationMap from "./components/GenerationMap.svelte";
 	import GenerationLineChart from "./components/GenerationLineChart.svelte";
+	import BarChart from "./components/BarChart.svelte";
 </script>
 
 <main>
 	<h1 x="50" >Visual Analytics Final Project: Team 7</h1>
 	<div id="container">
 
-		<div id="map-view">
+		<div id="map-view" height=700>
 
-			<div id="projection-view" class="view-panel">
-				<div class="view-title">Projection View</div>
-				<svg class="imagedot">
-					
-				</svg>
+			<div id="projection-view" height=700 class="view-panel">
+				<div class="view-title">Map View</div>
+				<svg height=700 width=1000>
+				<foreignObject height=700 width=1000><GenerationMap height=700 width=1000/></foreignObject>
+			</svg>
 			</div>
 			
 		</div>
@@ -20,22 +22,20 @@
 		<div id="sub-section" x="80" y="80">
 
 			<div id="generation-state-view" class="view-panel">
-				<div class="view-title" y="40">Selected Image</div>
+				<div class="view-title" y="40">Generation for States</div>
 
-				<div id="selected-image-view-content" >
-
-					<svg ></svg>
-
-				</div>
+				<svg width="1000" height=500>
+					<foreignObject height=700 width=1000><BarChart width=1000/></foreignObject>
+			</svg>
 
 			</div>
 
-			<div id="generation-state-resource-view" class="view-panel">
+			<div id="generation-state-resource-view" class="view-panel" height="400">
 
 				<div class="view-title">Generation for States by Resource</div>
-
-				<GenerationLineChart />
-				
+				<svg width="1000" height=500>
+					<foreignObject height=700 width=1000><GenerationLineChart width=1000/></foreignObject>
+			</svg>
 			</div>
 
 		</div>

@@ -3,8 +3,11 @@
 	import { VegaLite } from "svelte-vega";
 	
 	let data;
-	let viewVL1;
-	let viewVL2;
+	let data2;
+	let view;
+
+	let selectedYear = 2010;
+    let selectedMapEnergySource = "Total"
 
 	let specGeoTransform = [
 		{
@@ -22,7 +25,7 @@
 			as: "geo"
 		}
 	]
-	let specVL1 = {
+	let spec = {
 		$schema: "https://vega.github.io/schema/vega-lite/v5.json",
 		data: {
 			name: "table",
@@ -33,78 +36,65 @@
 		encoding: {
 			shape: { field: "geo", type: "geojson" },
 			color: {
-				field: "population",
+				field: "GENERATION",
 				type: "quantitative",
-                scale: {
-					domain: [0, 100000000],
-					range: ["#000000", "#ffffff"]
-				}
                 // scale: {
-				// 	domain: [0, 20000000, 40000000, 60000000, 80000000, 100000000],
+				// 	domain: [0, 100000000],
+				// 	range: ["#000000", "#ffffff"]
+				// }
+                // scale: {
+				// 	domain: [0, 10000000, 15000000, 20000000, 25000000, 30000000],
 				// 	range: ["#dddddd", "#aaaaaa", "#999999", "#666666", "#333333", "#000000"]
-				// }
-                // scale: {
-                //     scheme: "turbo"
-                // }
-			}
-		},
-		width: 600
-	};
-	let specVL2 = {
-		$schema: "https://vega.github.io/schema/vega-lite/v5.json",
-		data: {
-			name: "table",
-		},
-        transform: specGeoTransform,
-        projection: {type: "albersUsa"},
-		mark: "geoshape",
-		encoding: {
-			shape: { field: "geo", type: "geojson" },
-			color: {
-				field: "change",
-				type: "quantitative",
-                // scale: {
-				// 	domain: [-3, 3],
-				// 	range: ["#ffffff", "#000000"]
-				// }
-                // scale: {
-				// 	domain: [-3, -2, -1, 0, 1, 2, 3],
-				// 	range: ["#ffffff", "#dddddd", "#aaaaaa", "#999999", "#666666", "#333333", "#000000"]
 				// }
                 scale: {
                     scheme: "turbo"
                 }
 			}
 		},
-		width: 600
+		width: 1000
 	};
 
 	onMount(async () => {
 		const fetched = await fetch("static/state_populations.json");
+		const fetched2 = await fetch("static/new_data.json");
 		let rows = await fetched.json();
+		let rows2 = await fetched2.json();
 		console.log(rows);
+
+		let formattedData = rows2.filter(record => record.YEAR == selectedYear && 
+												record["ENERGY SOURCE"] == selectedMapEnergySource &&
+                                                record["TYPE OF PRODUCER"] == "Total Electric Power Industry" &&
+                                                record["STATE_ABBREV"] !== "US-TOTAL" &&
+                                                record.MONTH == 1.0);
+		console.log(formattedData)
+
+		for (let i = 0; i < formattedData.length; i++) {
+			rows[i].GENERATION = formattedData[i].GENERATION;
+		}
 
 		data = {
 			table: rows,
+		};
+		data2 = {
+			table: formattedData,
 		};
 	});
 </script>
 	
 
-<div id="chart">
+<div id="map">
 	{#if data !== undefined}
-		<VegaLite {data} spec={specVL1} bind:view={viewVL1} />
-		<VegaLite {data} spec={specVL2} bind:view={viewVL2} />
+		<VegaLite {data} spec={spec} bind:view={view} />
 	{/if}
 </div>
 
 
 <style>
-	#chart 
+	#map 
 	{
 		border: 10px;
 		border-style: dashed;
 		width: auto;
-		height: 50px;
+		height: 500px;
 	}
 </style>
