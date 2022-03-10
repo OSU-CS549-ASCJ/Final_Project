@@ -2,6 +2,10 @@
 	import GenerationMap from "./components/GenerationMap.svelte";
 	import GenerationLineChart from "./components/GenerationLineChart.svelte";
 	import BarChart from "./components/BarChart.svelte";
+
+	let selectedYear = 2010;
+	let selectedStates = ["OR", "WA"];
+	let selectedResource = "Natural Gas";
 </script>
 
 <main>
@@ -13,7 +17,7 @@
 			<div id="projection-view" height=700 class="view-panel">
 				<div class="view-title">Map View</div>
 				<svg height=700 width=1000>
-				<foreignObject height=700 width=1000><GenerationMap height=700 width=1000/></foreignObject>
+				<foreignObject height=700 width=1000><GenerationMap bind:selectedYear={selectedYear} height=700 width=1000/></foreignObject>
 			</svg>
 			</div>
 			
@@ -25,7 +29,7 @@
 				<div class="view-title" y="40">Generation for States</div>
 
 				<svg width="1000" height=500>
-					<foreignObject height=700 width=1000><BarChart width=1000/></foreignObject>
+					<foreignObject height=700 width=1000><BarChart bind:selectedYear={selectedYear} bind:selectedStates={selectedStates} width=1000/></foreignObject>
 			</svg>
 
 			</div>
@@ -34,7 +38,7 @@
 
 				<div class="view-title">Generation for States by Resource</div>
 				<svg width="1000" height=500>
-					<foreignObject height=700 width=1000><GenerationLineChart width=1000/></foreignObject>
+					<foreignObject height=700 width=1000><GenerationLineChart bind:selectedYear={selectedYear} bind:selectedStates={selectedStates} bind:selectedResource={selectedResource} width=1000/></foreignObject>
 			</svg>
 			</div>
 

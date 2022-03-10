@@ -7,9 +7,11 @@
 	const width = totalSize.w - margin.left - margin.right;
 	const height = totalSize.h - margin.top - margin.bottom;
 	
-	let selectedStates = ["WA", "OR"];
-	let selectedYear = "2010";
-	let selectedResource = "Total";
+	export let selectedStates;
+	export let selectedYear;
+	export let selectedResource;
+
+	console.log(selectedYear);
 
 	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 	let formatData = [];	//Contains each state's data as an element
@@ -86,6 +88,20 @@
 					.range([ height, 0 ]);
     	svg.append("g")
       		.call(d3.axisLeft(yAxis));
+
+		//Naming of the chart
+		svg.append("text")
+				.attr("x", totalSize.w - 250)
+				.attr("y", 5)
+				.text("Power Generation by " + selectedYear + " from ")
+				.style("font-size", "16px")
+				.attr("alignment-baseline","middle")
+		svg.append("text")
+				.attr("x", totalSize.w - 250)
+				.attr("y", 20)
+				.text("From Resource " + selectedResource)
+				.style("font-size", "16px")
+				.attr("alignment-baseline","middle")
 
 
 		//Create line and tooltip for each state data

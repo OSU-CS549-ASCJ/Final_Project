@@ -9,8 +9,8 @@
 	let xScaleNew;
 	let xScaleTicks = [];
 	let colorScale;
-	let year_selected = "2020" // 
-	let states_selected = ['Oregon','California', 'Washington'] // 
+	export let selectedYear; // 
+	export let selectedStates;
 	let selected_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
 								"Solar Thermal and Photovoltaic", "Other Biomass", "Wind", "Wood and Wood Derived Fuels"]
 	let all_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
@@ -24,9 +24,11 @@
 		instances = (await fetched.json());
 		
 		// filter by year and states
-		states_selected.forEach((state)=>{
-			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == year_selected && record.STATE == state; })})
+		selectedStates.forEach((state)=>{
+			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == selectedYear && record.STATE_ABBREV == state; })})
 		})
+
+		console.log(data);
 
 		// data transformation
 		data.forEach((state_data) => {
@@ -42,7 +44,7 @@
 			let temp = []
 			unique.forEach((genType) => {
 				if(genType != "Total"){
-					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE == state_data.State;});
+					let temp_data = state_data.records.filter((element) => { return element["ENERGY SOURCE"] == genType && element.STATE_ABBREV == state_data.State;});
 					let total = 0
 					temp_data.forEach((record) => {
 						total += record['GENERATION']
@@ -55,7 +57,7 @@
 			});
 			generation_values.push({"State": state_data.State, "Totals":temp})
 		});
-		//console.log(generation_values)
+		console.log(generation_values)
 		// console.log(max)
 		
 		

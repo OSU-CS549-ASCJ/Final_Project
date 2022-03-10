@@ -2610,7 +2610,7 @@ var app = (function () {
       return (d, x) => ascending$6(f(d), x);
     }
 
-    function number$b(x) {
+    function number$a(x) {
       return x === null ? NaN : +x;
     }
 
@@ -2634,7 +2634,7 @@ var app = (function () {
     const ascendingBisect$1 = bisector$2(ascending$6);
     const bisectRight$2 = ascendingBisect$1.right;
     const bisectLeft$2 = ascendingBisect$1.left;
-    bisector$2(number$b).center;
+    bisector$2(number$a).center;
     var bisect$2 = bisectRight$2;
 
     function count$3(values, valueof) {
@@ -2982,7 +2982,7 @@ var app = (function () {
       return value0 + (value1 - value0) * (i - i0);
     }
 
-    function quantileSorted$1(values, p, valueof = number$b) {
+    function quantileSorted$1(values, p, valueof = number$a) {
       if (!(n = values.length)) return;
       if ((p = +p) <= 0 || n < 2) return +valueof(values[0], 0, values);
       if (p >= 1) return +valueof(values[n - 1], n - 1, values);
@@ -3028,7 +3028,7 @@ var app = (function () {
       return Array.from(flatten$2(arrays));
     }
 
-    function sequence$2(start, stop, step) {
+    function range$7(start, stop, step) {
       start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
 
       var i = -1,
@@ -3491,7 +3491,7 @@ var app = (function () {
     const durationMonth$2 = durationDay$2 * 30;
     const durationYear$2 = durationDay$2 * 365;
 
-    var second$2 = newInterval$1(function(date) {
+    var second$1 = newInterval$1(function(date) {
       date.setTime(date - date.getMilliseconds());
     }, function(date, step) {
       date.setTime(+date + step * durationSecond$2);
@@ -3501,9 +3501,9 @@ var app = (function () {
       return date.getUTCSeconds();
     });
 
-    var utcSecond = second$2;
+    var utcSecond$1 = second$1;
 
-    var minute$2 = newInterval$1(function(date) {
+    var minute$1 = newInterval$1(function(date) {
       date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond$2);
     }, function(date, step) {
       date.setTime(+date + step * durationMinute$2);
@@ -3513,9 +3513,9 @@ var app = (function () {
       return date.getMinutes();
     });
 
-    var timeMinute = minute$2;
+    var timeMinute$1 = minute$1;
 
-    var hour$2 = newInterval$1(function(date) {
+    var hour$1 = newInterval$1(function(date) {
       date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond$2 - date.getMinutes() * durationMinute$2);
     }, function(date, step) {
       date.setTime(+date + step * durationHour$2);
@@ -3525,7 +3525,7 @@ var app = (function () {
       return date.getHours();
     });
 
-    var timeHour = hour$2;
+    var timeHour$1 = hour$1;
 
     var day$1 = newInterval$1(
       date => date.setHours(0, 0, 0, 0),
@@ -3555,7 +3555,7 @@ var app = (function () {
     weekday$2(5);
     weekday$2(6);
 
-    var month$2 = newInterval$1(function(date) {
+    var month$1 = newInterval$1(function(date) {
       date.setDate(1);
       date.setHours(0, 0, 0, 0);
     }, function(date, step) {
@@ -3566,7 +3566,7 @@ var app = (function () {
       return date.getMonth();
     });
 
-    var timeMonth = month$2;
+    var timeMonth$1 = month$1;
 
     var year$1 = newInterval$1(function(date) {
       date.setMonth(0, 1);
@@ -3687,10 +3687,10 @@ var app = (function () {
     function ticker$1(year, month, week, day, hour, minute) {
 
       const tickIntervals = [
-        [utcSecond,  1,      durationSecond$2],
-        [utcSecond,  5,  5 * durationSecond$2],
-        [utcSecond, 15, 15 * durationSecond$2],
-        [utcSecond, 30, 30 * durationSecond$2],
+        [utcSecond$1,  1,      durationSecond$2],
+        [utcSecond$1,  5,  5 * durationSecond$2],
+        [utcSecond$1, 15, 15 * durationSecond$2],
+        [utcSecond$1, 30, 30 * durationSecond$2],
         [minute,  1,      durationMinute$2],
         [minute,  5,  5 * durationMinute$2],
         [minute, 15, 15 * durationMinute$2],
@@ -3728,7 +3728,7 @@ var app = (function () {
     }
 
     const [utcTicks$1, utcTickInterval$1] = ticker$1(utcYear$3, utcMonth$3, utcSunday$1, utcDay$3, utcHour$3, utcMinute$3);
-    const [timeTicks$1, timeTickInterval$1] = ticker$1(timeYear$1, timeMonth, sunday$1, timeDay$1, timeHour, timeMinute);
+    const [timeTicks$1, timeTickInterval$1] = ticker$1(timeYear$1, timeMonth$1, sunday$1, timeDay$1, timeHour$1, timeMinute$1);
 
     const YEAR = 'year';
     const QUARTER = 'quarter';
@@ -3949,15 +3949,15 @@ var app = (function () {
 
     const timeIntervals = {
       [YEAR]: timeYear$1,
-      [QUARTER]: timeMonth.every(3),
-      [MONTH]: timeMonth,
+      [QUARTER]: timeMonth$1.every(3),
+      [MONTH]: timeMonth$1,
       [WEEK]: sunday$1,
       [DATE]: timeDay$1,
       [DAY]: timeDay$1,
       [DAYOFYEAR]: timeDay$1,
-      [HOURS]: timeHour,
-      [MINUTES]: timeMinute,
-      [SECONDS]: utcSecond,
+      [HOURS]: timeHour$1,
+      [MINUTES]: timeMinute$1,
+      [SECONDS]: utcSecond$1,
       [MILLISECONDS]: utcMillisecond
     };
     const utcIntervals = {
@@ -3970,7 +3970,7 @@ var app = (function () {
       [DAYOFYEAR]: utcDay$3,
       [HOURS]: utcHour$3,
       [MINUTES]: utcMinute$3,
-      [SECONDS]: utcSecond,
+      [SECONDS]: utcSecond$1,
       [MILLISECONDS]: utcMillisecond
     };
     function timeInterval(unit) {
@@ -12072,7 +12072,7 @@ var app = (function () {
               names = (_.groupby || []).map(accessorName),
               values = [],
               step = _.step || 0.01,
-              p = _.probs || sequence$2(step / 2, 1 - EPSILON$2, step),
+              p = _.probs || range$7(step / 2, 1 - EPSILON$2, step),
               n = p.length;
         groups.forEach(g => {
           const q = quantiles(g, p);
@@ -12306,7 +12306,7 @@ var app = (function () {
         const out = pulse.materialize().fork(pulse.MOD),
               as = _.as || 'data';
         out.rem = this.value ? pulse.rem.concat(this.value) : pulse.rem;
-        this.value = sequence$2(_.start, _.stop, _.step || 1).map(v => {
+        this.value = range$7(_.start, _.stop, _.step || 1).map(v => {
           const t = {};
           t[as] = v;
           return ingest$1(t);
@@ -15284,7 +15284,7 @@ var app = (function () {
           c = new Array(nb),
           i;
 
-      for (i = 0; i < na; ++i) x[i] = interpolate$4(a[i], b[i]);
+      for (i = 0; i < na; ++i) x[i] = interpolate$5(a[i], b[i]);
       for (; i < nb; ++i) c[i] = b[i];
 
       return function(t) {
@@ -15300,7 +15300,7 @@ var app = (function () {
       };
     }
 
-    function interpolateNumber(a, b) {
+    function interpolateNumber$1(a, b) {
       return a = +a, b = +b, function(t) {
         return a * (1 - t) + b * t;
       };
@@ -15316,7 +15316,7 @@ var app = (function () {
 
       for (k in b) {
         if (k in a) {
-          i[k] = interpolate$4(a[k], b[k]);
+          i[k] = interpolate$5(a[k], b[k]);
         } else {
           c[k] = b[k];
         }
@@ -15368,7 +15368,7 @@ var app = (function () {
           else s[++i] = bm;
         } else { // interpolate non-matching numbers
           s[++i] = null;
-          q.push({i: i, x: interpolateNumber(am, bm)});
+          q.push({i: i, x: interpolateNumber$1(am, bm)});
         }
         bi = reB$1.lastIndex;
       }
@@ -15391,17 +15391,17 @@ var app = (function () {
             });
     }
 
-    function interpolate$4(a, b) {
+    function interpolate$5(a, b) {
       var t = typeof b, c;
       return b == null || t === "boolean" ? constant$e(b)
-          : (t === "number" ? interpolateNumber
+          : (t === "number" ? interpolateNumber$1
           : t === "string" ? ((c = color$4(b)) ? (b = c, interpolateRgb) : interpolateString)
           : b instanceof color$4 ? interpolateRgb
           : b instanceof Date ? date$3
           : isNumberArray$1(b) ? numberArray$1
           : Array.isArray(b) ? genericArray$1
           : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object$2
-          : interpolateNumber)(a, b);
+          : interpolateNumber$1)(a, b);
     }
 
     function discrete$2(range) {
@@ -15419,7 +15419,7 @@ var app = (function () {
       };
     }
 
-    function interpolateRound(a, b) {
+    function interpolateRound$1(a, b) {
       return a = +a, b = +b, function(t) {
         return Math.round(a * (1 - t) + b * t);
       };
@@ -15478,7 +15478,7 @@ var app = (function () {
       function translate(xa, ya, xb, yb, s, q) {
         if (xa !== xb || ya !== yb) {
           var i = s.push("translate(", null, pxComma, null, pxParen);
-          q.push({i: i - 4, x: interpolateNumber(xa, xb)}, {i: i - 2, x: interpolateNumber(ya, yb)});
+          q.push({i: i - 4, x: interpolateNumber$1(xa, xb)}, {i: i - 2, x: interpolateNumber$1(ya, yb)});
         } else if (xb || yb) {
           s.push("translate(" + xb + pxComma + yb + pxParen);
         }
@@ -15487,7 +15487,7 @@ var app = (function () {
       function rotate(a, b, s, q) {
         if (a !== b) {
           if (a - b > 180) b += 360; else if (b - a > 180) a += 360; // shortest path
-          q.push({i: s.push(pop(s) + "rotate(", null, degParen) - 2, x: interpolateNumber(a, b)});
+          q.push({i: s.push(pop(s) + "rotate(", null, degParen) - 2, x: interpolateNumber$1(a, b)});
         } else if (b) {
           s.push(pop(s) + "rotate(" + b + degParen);
         }
@@ -15495,7 +15495,7 @@ var app = (function () {
 
       function skewX(a, b, s, q) {
         if (a !== b) {
-          q.push({i: s.push(pop(s) + "skewX(", null, degParen) - 2, x: interpolateNumber(a, b)});
+          q.push({i: s.push(pop(s) + "skewX(", null, degParen) - 2, x: interpolateNumber$1(a, b)});
         } else if (b) {
           s.push(pop(s) + "skewX(" + b + degParen);
         }
@@ -15504,7 +15504,7 @@ var app = (function () {
       function scale(xa, ya, xb, yb, s, q) {
         if (xa !== xb || ya !== yb) {
           var i = s.push(pop(s) + "scale(", null, ",", null, ")");
-          q.push({i: i - 4, x: interpolateNumber(xa, xb)}, {i: i - 2, x: interpolateNumber(ya, yb)});
+          q.push({i: i - 4, x: interpolateNumber$1(xa, xb)}, {i: i - 2, x: interpolateNumber$1(ya, yb)});
         } else if (xb !== 1 || yb !== 1) {
           s.push(pop(s) + "scale(" + xb + "," + yb + ")");
         }
@@ -15682,7 +15682,7 @@ var app = (function () {
     var cubehelixLong$1 = cubehelix$4(nogamma$1);
 
     function piecewise$1(interpolate, values) {
-      if (values === undefined) values = interpolate, interpolate = interpolate$4;
+      if (values === undefined) values = interpolate, interpolate = interpolate$5;
       var i = 0, n = values.length - 1, v = values[0], I = new Array(n < 0 ? 0 : n);
       while (i < n) I[i] = interpolate(v, v = values[++i]);
       return function(t) {
@@ -15699,17 +15699,17 @@ var app = (function () {
 
     var $ = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        interpolate: interpolate$4,
+        interpolate: interpolate$5,
         interpolateArray: array$9,
         interpolateBasis: basis$4,
         interpolateBasisClosed: basisClosed$2,
         interpolateDate: date$3,
         interpolateDiscrete: discrete$2,
         interpolateHue: hue$2,
-        interpolateNumber: interpolateNumber,
+        interpolateNumber: interpolateNumber$1,
         interpolateNumberArray: numberArray$1,
         interpolateObject: object$2,
-        interpolateRound: interpolateRound,
+        interpolateRound: interpolateRound$1,
         interpolateString: interpolateString,
         interpolateTransformCss: interpolateTransformCss$1,
         interpolateTransformSvg: interpolateTransformSvg$1,
@@ -15734,7 +15734,7 @@ var app = (function () {
       };
     }
 
-    function number$a(x) {
+    function number$9(x) {
       return +x;
     }
 
@@ -15800,7 +15800,7 @@ var app = (function () {
     function transformer$7() {
       var domain = unit$1,
           range = unit$1,
-          interpolate = interpolate$4,
+          interpolate = interpolate$5,
           transform,
           untransform,
           unknown,
@@ -15822,11 +15822,11 @@ var app = (function () {
       }
 
       scale.invert = function(y) {
-        return clamp(untransform((input || (input = piecewise(range, domain.map(transform), interpolateNumber)))(y)));
+        return clamp(untransform((input || (input = piecewise(range, domain.map(transform), interpolateNumber$1)))(y)));
       };
 
       scale.domain = function(_) {
-        return arguments.length ? (domain = Array.from(_, number$a), rescale()) : domain.slice();
+        return arguments.length ? (domain = Array.from(_, number$9), rescale()) : domain.slice();
       };
 
       scale.range = function(_) {
@@ -15834,7 +15834,7 @@ var app = (function () {
       };
 
       scale.rangeRound = function(_) {
-        return range = Array.from(_), interpolate = interpolateRound, rescale();
+        return range = Array.from(_), interpolate = interpolateRound$1, rescale();
       };
 
       scale.clamp = function(_) {
@@ -15962,7 +15962,7 @@ var app = (function () {
       scale.invert = scale;
 
       scale.domain = scale.range = function(_) {
-        return arguments.length ? (domain = Array.from(_, number$a), scale) : domain.slice();
+        return arguments.length ? (domain = Array.from(_, number$9), scale) : domain.slice();
       };
 
       scale.unknown = function(_) {
@@ -15973,7 +15973,7 @@ var app = (function () {
         return identity$b(domain).unknown(unknown);
       };
 
-      domain = arguments.length ? Array.from(domain, number$a) : [0, 1];
+      domain = arguments.length ? Array.from(domain, number$9) : [0, 1];
 
       return linearish$1(scale);
     }
@@ -16366,7 +16366,7 @@ var app = (function () {
       return new Date(t);
     }
 
-    function number$9(t) {
+    function number$8(t) {
       return t instanceof Date ? +t : +new Date(+t);
     }
 
@@ -16399,7 +16399,7 @@ var app = (function () {
       };
 
       scale.domain = function(_) {
-        return arguments.length ? domain(Array.from(_, number$9)) : domain().map(date$2);
+        return arguments.length ? domain(Array.from(_, number$8)) : domain().map(date$2);
       };
 
       scale.ticks = function(interval) {
@@ -16425,11 +16425,11 @@ var app = (function () {
     }
 
     function time$2() {
-      return initRange$1.apply(calendar$1(timeTicks$1, timeTickInterval$1, timeYear$1, timeMonth, sunday$1, timeDay$1, timeHour, timeMinute, utcSecond, timeFormat$3).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
+      return initRange$1.apply(calendar$1(timeTicks$1, timeTickInterval$1, timeYear$1, timeMonth$1, sunday$1, timeDay$1, timeHour$1, timeMinute$1, utcSecond$1, timeFormat$3).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
     }
 
     function utcTime$1() {
-      return initRange$1.apply(calendar$1(utcTicks$1, utcTickInterval$1, utcYear$3, utcMonth$3, utcSunday$1, utcDay$3, utcHour$3, utcMinute$3, utcSecond, utcFormat$2).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]), arguments);
+      return initRange$1.apply(calendar$1(utcTicks$1, utcTickInterval$1, utcYear$3, utcMonth$3, utcSunday$1, utcDay$3, utcHour$3, utcMinute$3, utcSecond$1, utcFormat$2).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]), arguments);
     }
 
     function transformer$6() {
@@ -16466,9 +16466,9 @@ var app = (function () {
         };
       }
 
-      scale.range = range(interpolate$4);
+      scale.range = range(interpolate$5);
 
-      scale.rangeRound = range(interpolateRound);
+      scale.rangeRound = range(interpolateRound$1);
 
       scale.unknown = function(_) {
         return arguments.length ? (unknown = _, scale) : unknown;
@@ -16570,9 +16570,9 @@ var app = (function () {
         };
       }
 
-      scale.range = range(interpolate$4);
+      scale.range = range(interpolate$5);
 
-      scale.rangeRound = range(interpolateRound);
+      scale.rangeRound = range(interpolateRound$1);
 
       scale.unknown = function(_) {
         return arguments.length ? (unknown = _, scale) : unknown;
@@ -16737,7 +16737,7 @@ var app = (function () {
           bandwidth = Math.round(bandwidth);
         }
 
-        const values = sequence$2(n).map(i => start + step * i);
+        const values = range$7(n).map(i => start + step * i);
         return ordinalRange(reverse ? values.reverse() : values);
       }
 
@@ -17030,7 +17030,7 @@ var app = (function () {
       };
     }
     function interpolateColors(colors, type, gamma) {
-      return piecewise$1(interpolate$3(type || 'rgb', gamma), colors);
+      return piecewise$1(interpolate$4(type || 'rgb', gamma), colors);
     }
     function quantizeInterpolator(interpolator, count) {
       const samples = new Array(count),
@@ -17054,7 +17054,7 @@ var app = (function () {
         return s;
       }
     }
-    function interpolate$3(type, gamma) {
+    function interpolate$4(type, gamma) {
       const interp = $[method(type)];
       return gamma != null && interp && interp.gamma ? interp.gamma(gamma) : interp;
     }
@@ -18171,7 +18171,7 @@ var app = (function () {
       return d.height;
     }
 
-    function number$8(_) {
+    function number$7(_) {
       return typeof _ === 'function' ? _ : () => +_;
     }
 
@@ -18184,7 +18184,7 @@ var app = (function () {
           y = rectangleY,
           width = rectangleWidth,
           height = rectangleHeight,
-          crTL = number$8(0),
+          crTL = number$7(0),
           crTR = crTL,
           crBL = crTL,
           crBR = crTL,
@@ -18228,7 +18228,7 @@ var app = (function () {
 
       rectangle.x = function (_) {
         if (arguments.length) {
-          x = number$8(_);
+          x = number$7(_);
           return rectangle;
         } else {
           return x;
@@ -18237,7 +18237,7 @@ var app = (function () {
 
       rectangle.y = function (_) {
         if (arguments.length) {
-          y = number$8(_);
+          y = number$7(_);
           return rectangle;
         } else {
           return y;
@@ -18246,7 +18246,7 @@ var app = (function () {
 
       rectangle.width = function (_) {
         if (arguments.length) {
-          width = number$8(_);
+          width = number$7(_);
           return rectangle;
         } else {
           return width;
@@ -18255,7 +18255,7 @@ var app = (function () {
 
       rectangle.height = function (_) {
         if (arguments.length) {
-          height = number$8(_);
+          height = number$7(_);
           return rectangle;
         } else {
           return height;
@@ -18264,10 +18264,10 @@ var app = (function () {
 
       rectangle.cornerRadius = function (tl, tr, br, bl) {
         if (arguments.length) {
-          crTL = number$8(tl);
-          crTR = tr != null ? number$8(tr) : crTL;
-          crBR = br != null ? number$8(br) : crTL;
-          crBL = bl != null ? number$8(bl) : crTR;
+          crTL = number$7(tl);
+          crTR = tr != null ? number$7(tr) : crTL;
+          crBR = br != null ? number$7(br) : crTL;
+          crBL = bl != null ? number$7(bl) : crTR;
           return rectangle;
         } else {
           return crTL;
@@ -18405,7 +18405,7 @@ var app = (function () {
       return trail;
     }
 
-    function value$1$1(a, b) {
+    function value$1(a, b) {
       return a != null ? a : b;
     }
 
@@ -18421,11 +18421,11 @@ var app = (function () {
           ir = item => item.innerRadius || 0,
           or = item => item.outerRadius || 0,
           cr = item => item.cornerRadius || 0,
-          tl = item => value$1$1(item.cornerRadiusTopLeft, item.cornerRadius) || 0,
-          tr = item => value$1$1(item.cornerRadiusTopRight, item.cornerRadius) || 0,
-          br = item => value$1$1(item.cornerRadiusBottomRight, item.cornerRadius) || 0,
-          bl = item => value$1$1(item.cornerRadiusBottomLeft, item.cornerRadius) || 0,
-          sz = item => value$1$1(item.size, 64),
+          tl = item => value$1(item.cornerRadiusTopLeft, item.cornerRadius) || 0,
+          tr = item => value$1(item.cornerRadiusTopRight, item.cornerRadius) || 0,
+          br = item => value$1(item.cornerRadiusBottomRight, item.cornerRadius) || 0,
+          bl = item => value$1(item.cornerRadiusBottomLeft, item.cornerRadius) || 0,
+          sz = item => value$1(item.size, 64),
           ts = item => item.size || 1,
           def = item => !(item.defined === false),
           type$1 = item => symbols$1(item.shape || 'circle');
@@ -24584,7 +24584,7 @@ var app = (function () {
             n = values.length,
             a = start,
             k = (stop - start) / sum$3(values),
-            index = sequence$2(n),
+            index = range$7(n),
             i,
             t,
             v;
@@ -24770,7 +24770,7 @@ var app = (function () {
         if (!step) error('Scale bins parameter missing step property.');
         if (start < lo) start = step * Math.ceil(lo / step);
         if (stop > hi) stop = step * Math.floor(hi / step);
-        bins = sequence$2(start, stop + step / 2, step);
+        bins = range$7(start, stop + step / 2, step);
       }
 
       if (bins) {
@@ -24824,11 +24824,11 @@ var app = (function () {
 
 
       if (range && _.interpolate && scale.interpolate) {
-        scale.interpolate(interpolate$3(_.interpolate, _.interpolateGamma));
+        scale.interpolate(interpolate$4(_.interpolate, _.interpolateGamma));
       } else if (isFunction(scale.round)) {
         scale.round(round);
       } else if (isFunction(scale.rangeRound)) {
-        scale.interpolate(round ? interpolateRound : interpolate$4);
+        scale.interpolate(round ? interpolateRound$1 : interpolate$5);
       }
 
       if (range) scale.range(flip(range, _.reverse));
@@ -26523,12 +26523,12 @@ var app = (function () {
     }
 
     function graticuleX$1(y0, y1, dy) {
-      var y = sequence$2(y0, y1 - epsilon$9, dy).concat(y1);
+      var y = range$7(y0, y1 - epsilon$9, dy).concat(y1);
       return function(x) { return y.map(function(y) { return [x, y]; }); };
     }
 
     function graticuleY$1(x0, x1, dx) {
-      var x = sequence$2(x0, x1 - epsilon$9, dx).concat(x1);
+      var x = range$7(x0, x1 - epsilon$9, dx).concat(x1);
       return function(y) { return x.map(function(x) { return [x, y]; }); };
     }
 
@@ -26544,10 +26544,10 @@ var app = (function () {
       }
 
       function lines() {
-        return sequence$2(ceil$1(X0 / DX) * DX, X1, DX).map(X)
-            .concat(sequence$2(ceil$1(Y0 / DY) * DY, Y1, DY).map(Y))
-            .concat(sequence$2(ceil$1(x0 / dx) * dx, x1, dx).filter(function(x) { return abs$5(x % DX) > epsilon$9; }).map(x))
-            .concat(sequence$2(ceil$1(y0 / dy) * dy, y1, dy).filter(function(y) { return abs$5(y % DY) > epsilon$9; }).map(y));
+        return range$7(ceil$1(X0 / DX) * DX, X1, DX).map(X)
+            .concat(range$7(ceil$1(Y0 / DY) * DY, Y1, DY).map(Y))
+            .concat(range$7(ceil$1(x0 / dx) * dx, x1, dx).filter(function(x) { return abs$5(x % DX) > epsilon$9; }).map(x))
+            .concat(range$7(ceil$1(y0 / dy) * dy, y1, dy).filter(function(y) { return abs$5(y % DY) > epsilon$9; }).map(y));
       }
 
       graticule.lines = function() {
@@ -28243,7 +28243,7 @@ var app = (function () {
             stop = ex[1],
             span = stop - start,
             step = nice ? tickStep$1(start, stop, k) : span / (k + 1);
-        return sequence$2(start + step, stop, step);
+        return range$7(start + step, stop, step);
       };
     }
 
@@ -28409,7 +28409,7 @@ var app = (function () {
       return Math.round((Math.sqrt(4 * v * v + 1) - 1) / 2);
     }
 
-    function number$7(_) {
+    function number$6(_) {
       return isFunction(_) ? _ : constant$g(+_);
     } // Implementation adapted from d3/d3-contour. Thanks!
 
@@ -28487,15 +28487,15 @@ var app = (function () {
       }
 
       density.x = function (_) {
-        return arguments.length ? (x = number$7(_), density) : x;
+        return arguments.length ? (x = number$6(_), density) : x;
       };
 
       density.y = function (_) {
-        return arguments.length ? (y = number$7(_), density) : y;
+        return arguments.length ? (y = number$6(_), density) : y;
       };
 
       density.weight = function (_) {
-        return arguments.length ? (weight = number$7(_), density) : weight;
+        return arguments.length ? (weight = number$6(_), density) : weight;
       };
 
       density.size = function (_) {
@@ -39260,7 +39260,7 @@ var app = (function () {
       hsl: hsl$5,
       luminance,
       contrast,
-      sequence: sequence$2,
+      sequence: range$7,
       format: format$1,
       utcFormat: utcFormat$1,
       utcParse: utcParse$1,
@@ -40841,7 +40841,7 @@ var app = (function () {
       return el;
     }
 
-    const number$6 = _ => +_ || 0;
+    const number$5 = _ => +_ || 0;
 
     const paddingObject$1 = _ => ({
       top: _,
@@ -40852,11 +40852,11 @@ var app = (function () {
 
     function padding$1 (_) {
       return isObject(_) ? {
-        top: number$6(_.top),
-        bottom: number$6(_.bottom),
-        left: number$6(_.left),
-        right: number$6(_.right)
-      } : paddingObject$1(number$6(_));
+        top: number$5(_.top),
+        bottom: number$5(_.bottom),
+        left: number$5(_.left),
+        right: number$5(_.right)
+      } : paddingObject$1(number$5(_));
     }
 
     /**
@@ -41699,7 +41699,7 @@ var app = (function () {
       };
     }
 
-    const number$5 = _ => +_ || 0;
+    const number$4 = _ => +_ || 0;
 
     const paddingObject = _ => ({
       top: _,
@@ -41709,11 +41709,11 @@ var app = (function () {
     });
 
     function parsePadding (spec) {
-      return !isObject(spec) ? paddingObject(number$5(spec)) : spec.signal ? spec : {
-        top: number$5(spec.top),
-        bottom: number$5(spec.bottom),
-        left: number$5(spec.left),
-        right: number$5(spec.right)
+      return !isObject(spec) ? paddingObject(number$4(spec)) : spec.signal ? spec : {
+        top: number$4(spec.top),
+        bottom: number$4(spec.bottom),
+        left: number$4(spec.left),
+        right: number$4(spec.right)
       };
     }
 
@@ -42114,7 +42114,7 @@ var app = (function () {
       }
       return false;
     }
-    function value$1(specValue, defaultValue) {
+    function value(specValue, defaultValue) {
       return specValue != null ? specValue : defaultValue;
     }
     function deref(v) {
@@ -42680,15 +42680,15 @@ var app = (function () {
     }
 
     function lookup(spec, config) {
-      const _ = (name, dflt) => value$1(spec[name], value$1(config[name], dflt));
+      const _ = (name, dflt) => value(spec[name], value(config[name], dflt));
 
-      _.isVertical = s => Vertical === value$1(spec.direction, config.direction || (s ? config.symbolDirection : config.gradientDirection));
+      _.isVertical = s => Vertical === value(spec.direction, config.direction || (s ? config.symbolDirection : config.gradientDirection));
 
-      _.gradientLength = () => value$1(spec.gradientLength, config.gradientLength || config.gradientWidth);
+      _.gradientLength = () => value(spec.gradientLength, config.gradientLength || config.gradientWidth);
 
-      _.gradientThickness = () => value$1(spec.gradientThickness, config.gradientThickness || config.gradientHeight);
+      _.gradientThickness = () => value(spec.gradientThickness, config.gradientThickness || config.gradientHeight);
 
-      _.entryColumns = () => value$1(spec.columns, value$1(config.columns, +_.isVertical(true)));
+      _.entryColumns = () => value(spec.columns, value(config.columns, +_.isVertical(true)));
 
       return _;
     }
@@ -42911,7 +42911,7 @@ var app = (function () {
         fontSize: _('labelFontSize'),
         fontStyle: _('labelFontStyle'),
         fontWeight: _('labelFontWeight'),
-        limit: value$1(spec.labelLimit, config.gradientLabelLimit)
+        limit: value(spec.labelLimit, config.gradientLabelLimit)
       });
 
       if (vertical) {
@@ -42940,7 +42940,7 @@ var app = (function () {
         mult: length
       };
       enter[v] = update[v] = thickness;
-      thickness.offset = value$1(spec.labelOffset, config.gradientLabelOffset) || 0;
+      thickness.offset = value(spec.labelOffset, config.gradientLabelOffset) || 0;
       overlap = overlap ? {
         separation: _('labelSeparation'),
         method: overlap,
@@ -44888,7 +44888,7 @@ var app = (function () {
       addEncoders(encode, {
         orient: _('orient'),
         offset: _('offset') || 0,
-        position: value$1(spec.position, 0),
+        position: value(spec.position, 0),
         titlePadding: _('titlePadding'),
         minExtent: _('minExtent'),
         maxExtent: _('maxExtent'),
@@ -45023,7 +45023,7 @@ var app = (function () {
 
 
     function collectSignals(spec, config) {
-      const _ = name => value$1(spec[name], config[name]),
+      const _ = name => value(spec[name], config[name]),
             signals = [signalObject('background', _('background')), signalObject('autosize', parseAutosize(_('autosize'))), signalObject('padding', parsePadding(_('padding'))), signalObject('width', _('width') || 0), signalObject('height', _('height') || 0)],
             pre = signals.reduce((p, s) => (p[s.name] = s, p), {}),
             map = {}; // add spec signal array
@@ -45820,7 +45820,7 @@ var app = (function () {
         transform: transform$4,
         transforms: transforms,
         tupleid: tupleid,
-        interpolate: interpolate$3,
+        interpolate: interpolate$4,
         interpolateColors: interpolateColors,
         interpolateRange: interpolateRange$1,
         quantizeInterpolator: quantizeInterpolator,
@@ -61172,7 +61172,7 @@ var app = (function () {
     }
     const scaleRules = {
         bins: ({ model, fieldOrDatumDef }) => (isFieldDef(fieldOrDatumDef) ? bins(model, fieldOrDatumDef) : undefined),
-        interpolate: ({ channel, fieldOrDatumDef }) => interpolate$2(channel, fieldOrDatumDef.type),
+        interpolate: ({ channel, fieldOrDatumDef }) => interpolate$3(channel, fieldOrDatumDef.type),
         nice: ({ scaleType, channel, domain, domainMin, domainMax, fieldOrDatumDef }) => nice$2(scaleType, channel, domain, domainMin, domainMax, fieldOrDatumDef),
         padding: ({ channel, scaleType, fieldOrDatumDef, markDef, config }) => padding(channel, scaleType, config.scale, fieldOrDatumDef, markDef, config.bar),
         paddingInner: ({ scalePadding, channel, markDef, scaleType, config, hasNestedOffsetScale }) => paddingInner(scalePadding, channel, markDef.type, scaleType, config.scale, hasNestedOffsetScale),
@@ -61241,7 +61241,7 @@ var app = (function () {
         }
         return undefined;
     }
-    function interpolate$2(channel, type) {
+    function interpolate$3(channel, type) {
         if (contains$3([COLOR, FILL, STROKE], channel) && type !== 'nominal') {
             return 'hcl';
         }
@@ -71140,7 +71140,7 @@ var app = (function () {
     			append_dev(svg, path51);
 
     			if (!mounted) {
-    				dispose = listen_dev(path0, "click", /*click_handler*/ ctx[1], false, false, false);
+    				dispose = listen_dev(path0, "click", /*click_handler*/ ctx[2], false, false, false);
     				mounted = true;
     			}
     		},
@@ -71222,7 +71222,7 @@ var app = (function () {
     	validate_slots('GenerationMap', slots, []);
     	let data;
     	let view;
-    	let selectedYear = 2010;
+    	let { selectedYear } = $$props;
     	let selectedMapEnergySource = "Total";
     	let formattedData;
 
@@ -71234,7 +71234,7 @@ var app = (function () {
     		console.log(data);
     	});
 
-    	const writable_props = [];
+    	const writable_props = ['selectedYear'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$2.warn(`<GenerationMap> was created with unknown prop '${key}'`);
@@ -71242,6 +71242,10 @@ var app = (function () {
 
     	const click_handler = () => {
     		alert(this);
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
     	};
 
     	$$self.$capture_state = () => ({
@@ -71257,7 +71261,7 @@ var app = (function () {
     	$$self.$inject_state = $$props => {
     		if ('data' in $$props) $$invalidate(0, data = $$props.data);
     		if ('view' in $$props) view = $$props.view;
-    		if ('selectedYear' in $$props) selectedYear = $$props.selectedYear;
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
     		if ('selectedMapEnergySource' in $$props) selectedMapEnergySource = $$props.selectedMapEnergySource;
     		if ('formattedData' in $$props) formattedData = $$props.formattedData;
     	};
@@ -71266,13 +71270,13 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [data, click_handler];
+    	return [data, selectedYear, click_handler];
     }
 
     class GenerationMap extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$2(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+    		init$2(this, options, instance$3, create_fragment$3, safe_not_equal, { selectedYear: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -71280,6 +71284,21 @@ var app = (function () {
     			options,
     			id: create_fragment$3.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*selectedYear*/ ctx[1] === undefined && !('selectedYear' in props)) {
+    			console_1$2.warn("<GenerationMap> was created without expected prop 'selectedYear'");
+    		}
+    	}
+
+    	get selectedYear() {
+    		throw new Error("<GenerationMap>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedYear(value) {
+    		throw new Error("<GenerationMap>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -71330,7 +71349,7 @@ var app = (function () {
       return {left, center, right};
     }
 
-    function number$4(x) {
+    function number$3(x) {
       return x === null ? NaN : +x;
     }
 
@@ -71354,7 +71373,7 @@ var app = (function () {
     const ascendingBisect = bisector(ascending$3);
     const bisectRight = ascendingBisect.right;
     const bisectLeft = ascendingBisect.left;
-    const bisectCenter = bisector(number$4).center;
+    const bisectCenter = bisector(number$3).center;
     var bisect = bisectRight;
 
     function count$1(values, valueof) {
@@ -71948,7 +71967,7 @@ var app = (function () {
       return value0 + (value1 - value0) * (i - i0);
     }
 
-    function quantileSorted(values, p, valueof = number$4) {
+    function quantileSorted(values, p, valueof = number$3) {
       if (!(n = values.length)) return;
       if ((p = +p) <= 0 || n < 2) return +valueof(values[0], 0, values);
       if (p >= 1) return +valueof(values[n - 1], n - 1, values);
@@ -72427,7 +72446,7 @@ var app = (function () {
       return "translate(0," + y + ")";
     }
 
-    function number$3(scale) {
+    function number$2(scale) {
       return d => +scale(d);
     }
 
@@ -72460,7 +72479,7 @@ var app = (function () {
             range = scale.range(),
             range0 = +range[0] + offset,
             range1 = +range[range.length - 1] + offset,
-            position = (scale.bandwidth ? center$1 : number$3)(scale.copy(), offset),
+            position = (scale.bandwidth ? center$1 : number$2)(scale.copy(), offset),
             selection = context.selection ? context.selection() : context,
             path = selection.selectAll(".domain").data([null]),
             tick = selection.selectAll(".tick").data(values, scale).order(),
@@ -74101,9 +74120,9 @@ var app = (function () {
       };
     }
 
-    function interpolate$1(a, b) {
+    function interpolate$2(a, b) {
       var c;
-      return (typeof b === "number" ? interpolateNumber
+      return (typeof b === "number" ? interpolateNumber$1
           : b instanceof color$4 ? interpolateRgb
           : (c = color$4(b)) ? (b = c, interpolateRgb)
           : interpolateString)(a, b);
@@ -74176,7 +74195,7 @@ var app = (function () {
     }
 
     function transition_attr(name, value) {
-      var fullname = namespace(name), i = fullname === "transform" ? interpolateTransformSvg$1 : interpolate$1;
+      var fullname = namespace(name), i = fullname === "transform" ? interpolateTransformSvg$1 : interpolate$2;
       return this.attrTween(name, typeof value === "function"
           ? (fullname.local ? attrFunctionNS : attrFunction)(fullname, i, tweenValue(this, "attr." + name, value))
           : value == null ? (fullname.local ? attrRemoveNS : attrRemove)(fullname)
@@ -74484,7 +74503,7 @@ var app = (function () {
     }
 
     function transition_style(name, value, priority) {
-      var i = (name += "") === "transform" ? interpolateTransformCss$1 : interpolate$1;
+      var i = (name += "") === "transform" ? interpolateTransformCss$1 : interpolate$2;
       return value == null ? this
           .styleTween(name, styleNull(name, i))
           .on("end.style." + name, styleRemove(name))
@@ -75184,7 +75203,7 @@ var app = (function () {
                     emit = emitter(that, arguments),
                     selection0 = state.selection,
                     selection1 = dim.input(typeof selection === "function" ? selection.apply(this, arguments) : selection, state.extent),
-                    i = interpolate$4(selection0, selection1);
+                    i = interpolate$5(selection0, selection1);
 
                 function tween(t) {
                   state.selection = t === 1 && selection1 === null ? null : i(t);
@@ -76755,7 +76774,7 @@ var app = (function () {
         if (!Array.isArray(tz)) {
           var stop = max$6(values0);
           tz = tickStep$1(0, stop, tz);
-          tz = sequence$2(0, Math.floor(stop / tz) * tz, tz);
+          tz = range$7(0, Math.floor(stop / tz) * tz, tz);
           tz.shift();
         }
 
@@ -81886,7 +81905,7 @@ var app = (function () {
       return graticule()();
     }
 
-    function interpolate(a, b) {
+    function interpolate$1(a, b) {
       var x0 = a[0] * radians,
           y0 = a[1] * radians,
           x1 = b[0] * radians,
@@ -84695,7 +84714,7 @@ var app = (function () {
           c = new Array(nb),
           i;
 
-      for (i = 0; i < na; ++i) x[i] = value(a[i], b[i]);
+      for (i = 0; i < na; ++i) x[i] = interpolate(a[i], b[i]);
       for (; i < nb; ++i) c[i] = b[i];
 
       return function(t) {
@@ -84711,7 +84730,7 @@ var app = (function () {
       };
     }
 
-    function number$2(a, b) {
+    function interpolateNumber(a, b) {
       return a = +a, b = +b, function(t) {
         return a * (1 - t) + b * t;
       };
@@ -84727,7 +84746,7 @@ var app = (function () {
 
       for (k in b) {
         if (k in a) {
-          i[k] = value(a[k], b[k]);
+          i[k] = interpolate(a[k], b[k]);
         } else {
           c[k] = b[k];
         }
@@ -84779,7 +84798,7 @@ var app = (function () {
           else s[++i] = bm;
         } else { // interpolate non-matching numbers
           s[++i] = null;
-          q.push({i: i, x: number$2(am, bm)});
+          q.push({i: i, x: interpolateNumber(am, bm)});
         }
         bi = reB.lastIndex;
       }
@@ -84802,17 +84821,17 @@ var app = (function () {
             });
     }
 
-    function value(a, b) {
+    function interpolate(a, b) {
       var t = typeof b, c;
       return b == null || t === "boolean" ? constant$2(b)
-          : (t === "number" ? number$2
+          : (t === "number" ? interpolateNumber
           : t === "string" ? ((c = color(b)) ? (b = c, rgb) : string)
           : b instanceof color ? rgb
           : b instanceof Date ? date$1
           : isNumberArray(b) ? numberArray
           : Array.isArray(b) ? genericArray
           : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object
-          : number$2)(a, b);
+          : interpolateNumber)(a, b);
     }
 
     function discrete(range) {
@@ -84830,7 +84849,7 @@ var app = (function () {
       };
     }
 
-    function round(a, b) {
+    function interpolateRound(a, b) {
       return a = +a, b = +b, function(t) {
         return Math.round(a * (1 - t) + b * t);
       };
@@ -84889,7 +84908,7 @@ var app = (function () {
       function translate(xa, ya, xb, yb, s, q) {
         if (xa !== xb || ya !== yb) {
           var i = s.push("translate(", null, pxComma, null, pxParen);
-          q.push({i: i - 4, x: number$2(xa, xb)}, {i: i - 2, x: number$2(ya, yb)});
+          q.push({i: i - 4, x: interpolateNumber(xa, xb)}, {i: i - 2, x: interpolateNumber(ya, yb)});
         } else if (xb || yb) {
           s.push("translate(" + xb + pxComma + yb + pxParen);
         }
@@ -84898,7 +84917,7 @@ var app = (function () {
       function rotate(a, b, s, q) {
         if (a !== b) {
           if (a - b > 180) b += 360; else if (b - a > 180) a += 360; // shortest path
-          q.push({i: s.push(pop(s) + "rotate(", null, degParen) - 2, x: number$2(a, b)});
+          q.push({i: s.push(pop(s) + "rotate(", null, degParen) - 2, x: interpolateNumber(a, b)});
         } else if (b) {
           s.push(pop(s) + "rotate(" + b + degParen);
         }
@@ -84906,7 +84925,7 @@ var app = (function () {
 
       function skewX(a, b, s, q) {
         if (a !== b) {
-          q.push({i: s.push(pop(s) + "skewX(", null, degParen) - 2, x: number$2(a, b)});
+          q.push({i: s.push(pop(s) + "skewX(", null, degParen) - 2, x: interpolateNumber(a, b)});
         } else if (b) {
           s.push(pop(s) + "skewX(" + b + degParen);
         }
@@ -84915,7 +84934,7 @@ var app = (function () {
       function scale(xa, ya, xb, yb, s, q) {
         if (xa !== xb || ya !== yb) {
           var i = s.push(pop(s) + "scale(", null, ",", null, ")");
-          q.push({i: i - 4, x: number$2(xa, xb)}, {i: i - 2, x: number$2(ya, yb)});
+          q.push({i: i - 4, x: interpolateNumber(xa, xb)}, {i: i - 2, x: interpolateNumber(ya, yb)});
         } else if (xb !== 1 || yb !== 1) {
           s.push(pop(s) + "scale(" + xb + "," + yb + ")");
         }
@@ -85092,10 +85111,10 @@ var app = (function () {
     var cubehelix$2 = cubehelix$1(hue$1);
     var cubehelixLong = cubehelix$1(nogamma);
 
-    function piecewise(interpolate, values) {
-      if (values === undefined) values = interpolate, interpolate = value;
+    function piecewise(interpolate$1, values) {
+      if (values === undefined) values = interpolate$1, interpolate$1 = interpolate;
       var i = 0, n = values.length - 1, v = values[0], I = new Array(n < 0 ? 0 : n);
-      while (i < n) I[i] = interpolate(v, v = values[++i]);
+      while (i < n) I[i] = interpolate$1(v, v = values[++i]);
       return function(t) {
         var i = Math.max(0, Math.min(n - 1, Math.floor(t *= n)));
         return I[i](t - i);
@@ -85796,7 +85815,7 @@ var app = (function () {
         start += (stop - start - step * (n - paddingInner)) * align;
         bandwidth = step * (1 - paddingInner);
         if (round) start = Math.round(start), bandwidth = Math.round(bandwidth);
-        var values = sequence$2(n).map(function(i) { return start + step * i; });
+        var values = range$2(n).map(function(i) { return start + step * i; });
         return ordinalRange(reverse ? values.reverse() : values);
       }
 
@@ -85924,7 +85943,7 @@ var app = (function () {
       }
 
       return function(x) {
-        var i = bisect$2(domain, x, 1, j) - 1;
+        var i = bisect(domain, x, 1, j) - 1;
         return r[i](d[i](x));
       };
     }
@@ -85941,7 +85960,7 @@ var app = (function () {
     function transformer$2() {
       var domain = unit,
           range = unit,
-          interpolate = interpolate$4,
+          interpolate$1 = interpolate,
           transform,
           untransform,
           unknown,
@@ -85959,7 +85978,7 @@ var app = (function () {
       }
 
       function scale(x) {
-        return x == null || isNaN(x = +x) ? unknown : (output || (output = piecewise(domain.map(transform), range, interpolate)))(transform(clamp(x)));
+        return x == null || isNaN(x = +x) ? unknown : (output || (output = piecewise(domain.map(transform), range, interpolate$1)))(transform(clamp(x)));
       }
 
       scale.invert = function(y) {
@@ -85975,7 +85994,7 @@ var app = (function () {
       };
 
       scale.rangeRound = function(_) {
-        return range = Array.from(_), interpolate = interpolateRound, rescale();
+        return range = Array.from(_), interpolate$1 = interpolateRound, rescale();
       };
 
       scale.clamp = function(_) {
@@ -85983,7 +86002,7 @@ var app = (function () {
       };
 
       scale.interpolate = function(_) {
-        return arguments.length ? (interpolate = _, rescale()) : interpolate;
+        return arguments.length ? (interpolate$1 = _, rescale()) : interpolate$1;
       };
 
       scale.unknown = function(_) {
@@ -86001,30 +86020,30 @@ var app = (function () {
     }
 
     function tickFormat(start, stop, count, specifier) {
-      var step = tickStep$1(start, stop, count),
+      var step = tickStep(start, stop, count),
           precision;
-      specifier = formatSpecifier$1(specifier == null ? ",f" : specifier);
+      specifier = formatSpecifier(specifier == null ? ",f" : specifier);
       switch (specifier.type) {
         case "s": {
           var value = Math.max(Math.abs(start), Math.abs(stop));
-          if (specifier.precision == null && !isNaN(precision = precisionPrefix$1(step, value))) specifier.precision = precision;
-          return formatPrefix$1(specifier, value);
+          if (specifier.precision == null && !isNaN(precision = precisionPrefix(step, value))) specifier.precision = precision;
+          return formatPrefix(specifier, value);
         }
         case "":
         case "e":
         case "g":
         case "p":
         case "r": {
-          if (specifier.precision == null && !isNaN(precision = precisionRound$1(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
+          if (specifier.precision == null && !isNaN(precision = precisionRound(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
           break;
         }
         case "f":
         case "%": {
-          if (specifier.precision == null && !isNaN(precision = precisionFixed$1(step))) specifier.precision = precision - (specifier.type === "%") * 2;
+          if (specifier.precision == null && !isNaN(precision = precisionFixed(step))) specifier.precision = precision - (specifier.type === "%") * 2;
           break;
         }
       }
-      return format$4(specifier);
+      return format(specifier);
     }
 
     function linearish(scale) {
@@ -86032,7 +86051,7 @@ var app = (function () {
 
       scale.ticks = function(count) {
         var d = domain();
-        return ticks$1(d[0], d[d.length - 1], count == null ? 10 : count);
+        return ticks(d[0], d[d.length - 1], count == null ? 10 : count);
       };
 
       scale.tickFormat = function(count, specifier) {
@@ -86058,7 +86077,7 @@ var app = (function () {
         }
         
         while (maxIter-- > 0) {
-          step = tickIncrement$1(start, stop, count);
+          step = tickIncrement(start, stop, count);
           if (step === prestep) {
             d[i0] = start;
             d[i1] = stop;
@@ -86233,9 +86252,9 @@ var app = (function () {
               z.push(t);
             }
           }
-          if (z.length * 2 < n) z = ticks$1(u, v, n);
+          if (z.length * 2 < n) z = ticks(u, v, n);
         } else {
-          z = ticks$1(i, j, Math.min(j - i, n)).map(pows);
+          z = ticks(i, j, Math.min(j - i, n)).map(pows);
         }
         return r ? z.reverse() : z;
       };
@@ -86244,8 +86263,8 @@ var app = (function () {
         if (count == null) count = 10;
         if (specifier == null) specifier = base === 10 ? "s" : ",";
         if (typeof specifier !== "function") {
-          if (!(base % 1) && (specifier = formatSpecifier$1(specifier)).precision == null) specifier.trim = true;
-          specifier = format$4(specifier);
+          if (!(base % 1) && (specifier = formatSpecifier(specifier)).precision == null) specifier.trim = true;
+          specifier = format(specifier);
         }
         if (count === Infinity) return specifier;
         const k = Math.max(1, base * count / scale.ticks().length); // TODO fast estimate?
@@ -86420,12 +86439,12 @@ var app = (function () {
       function rescale() {
         var i = 0, n = Math.max(1, range.length);
         thresholds = new Array(n - 1);
-        while (++i < n) thresholds[i - 1] = quantileSorted$1(domain, i / n);
+        while (++i < n) thresholds[i - 1] = quantileSorted(domain, i / n);
         return scale;
       }
 
       function scale(x) {
-        return x == null || isNaN(x = +x) ? unknown : range[bisect$2(thresholds, x)];
+        return x == null || isNaN(x = +x) ? unknown : range[bisect(thresholds, x)];
       }
 
       scale.invertExtent = function(y) {
@@ -86440,7 +86459,7 @@ var app = (function () {
         if (!arguments.length) return domain.slice();
         domain = [];
         for (let d of _) if (d != null && !isNaN(d = +d)) domain.push(d);
-        domain.sort(ascending$6);
+        domain.sort(ascending$3);
         return rescale();
       };
 
@@ -86475,7 +86494,7 @@ var app = (function () {
           unknown;
 
       function scale(x) {
-        return x != null && x <= x ? range[bisect$2(domain, x, 0, n)] : unknown;
+        return x != null && x <= x ? range[bisect(domain, x, 0, n)] : unknown;
       }
 
       function rescale() {
@@ -86526,7 +86545,7 @@ var app = (function () {
           n = 1;
 
       function scale(x) {
-        return x != null && x <= x ? range[bisect$2(domain, x, 0, n)] : unknown;
+        return x != null && x <= x ? range[bisect(domain, x, 0, n)] : unknown;
       }
 
       scale.domain = function(_) {
@@ -86555,6 +86574,1110 @@ var app = (function () {
 
       return initRange.apply(scale, arguments);
     }
+
+    var t0 = new Date,
+        t1 = new Date;
+
+    function newInterval(floori, offseti, count, field) {
+
+      function interval(date) {
+        return floori(date = arguments.length === 0 ? new Date : new Date(+date)), date;
+      }
+
+      interval.floor = function(date) {
+        return floori(date = new Date(+date)), date;
+      };
+
+      interval.ceil = function(date) {
+        return floori(date = new Date(date - 1)), offseti(date, 1), floori(date), date;
+      };
+
+      interval.round = function(date) {
+        var d0 = interval(date),
+            d1 = interval.ceil(date);
+        return date - d0 < d1 - date ? d0 : d1;
+      };
+
+      interval.offset = function(date, step) {
+        return offseti(date = new Date(+date), step == null ? 1 : Math.floor(step)), date;
+      };
+
+      interval.range = function(start, stop, step) {
+        var range = [], previous;
+        start = interval.ceil(start);
+        step = step == null ? 1 : Math.floor(step);
+        if (!(start < stop) || !(step > 0)) return range; // also handles Invalid Date
+        do range.push(previous = new Date(+start)), offseti(start, step), floori(start);
+        while (previous < start && start < stop);
+        return range;
+      };
+
+      interval.filter = function(test) {
+        return newInterval(function(date) {
+          if (date >= date) while (floori(date), !test(date)) date.setTime(date - 1);
+        }, function(date, step) {
+          if (date >= date) {
+            if (step < 0) while (++step <= 0) {
+              while (offseti(date, -1), !test(date)) {} // eslint-disable-line no-empty
+            } else while (--step >= 0) {
+              while (offseti(date, +1), !test(date)) {} // eslint-disable-line no-empty
+            }
+          }
+        });
+      };
+
+      if (count) {
+        interval.count = function(start, end) {
+          t0.setTime(+start), t1.setTime(+end);
+          floori(t0), floori(t1);
+          return Math.floor(count(t0, t1));
+        };
+
+        interval.every = function(step) {
+          step = Math.floor(step);
+          return !isFinite(step) || !(step > 0) ? null
+              : !(step > 1) ? interval
+              : interval.filter(field
+                  ? function(d) { return field(d) % step === 0; }
+                  : function(d) { return interval.count(0, d) % step === 0; });
+        };
+      }
+
+      return interval;
+    }
+
+    var millisecond = newInterval(function() {
+      // noop
+    }, function(date, step) {
+      date.setTime(+date + step);
+    }, function(start, end) {
+      return end - start;
+    });
+
+    // An optimized implementation for this simple case.
+    millisecond.every = function(k) {
+      k = Math.floor(k);
+      if (!isFinite(k) || !(k > 0)) return null;
+      if (!(k > 1)) return millisecond;
+      return newInterval(function(date) {
+        date.setTime(Math.floor(date / k) * k);
+      }, function(date, step) {
+        date.setTime(+date + step * k);
+      }, function(start, end) {
+        return (end - start) / k;
+      });
+    };
+
+    var millisecond$1 = millisecond;
+    var milliseconds = millisecond.range;
+
+    const durationSecond = 1000;
+    const durationMinute = durationSecond * 60;
+    const durationHour = durationMinute * 60;
+    const durationDay = durationHour * 24;
+    const durationWeek = durationDay * 7;
+    const durationMonth = durationDay * 30;
+    const durationYear = durationDay * 365;
+
+    var second = newInterval(function(date) {
+      date.setTime(date - date.getMilliseconds());
+    }, function(date, step) {
+      date.setTime(+date + step * durationSecond);
+    }, function(start, end) {
+      return (end - start) / durationSecond;
+    }, function(date) {
+      return date.getUTCSeconds();
+    });
+
+    var utcSecond = second;
+    var seconds = second.range;
+
+    var minute = newInterval(function(date) {
+      date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond);
+    }, function(date, step) {
+      date.setTime(+date + step * durationMinute);
+    }, function(start, end) {
+      return (end - start) / durationMinute;
+    }, function(date) {
+      return date.getMinutes();
+    });
+
+    var timeMinute = minute;
+    var minutes = minute.range;
+
+    var hour = newInterval(function(date) {
+      date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond - date.getMinutes() * durationMinute);
+    }, function(date, step) {
+      date.setTime(+date + step * durationHour);
+    }, function(start, end) {
+      return (end - start) / durationHour;
+    }, function(date) {
+      return date.getHours();
+    });
+
+    var timeHour = hour;
+    var hours = hour.range;
+
+    var day = newInterval(
+      date => date.setHours(0, 0, 0, 0),
+      (date, step) => date.setDate(date.getDate() + step),
+      (start, end) => (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationDay,
+      date => date.getDate() - 1
+    );
+
+    var timeDay = day;
+    var days = day.range;
+
+    function weekday(i) {
+      return newInterval(function(date) {
+        date.setDate(date.getDate() - (date.getDay() + 7 - i) % 7);
+        date.setHours(0, 0, 0, 0);
+      }, function(date, step) {
+        date.setDate(date.getDate() + step * 7);
+      }, function(start, end) {
+        return (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationWeek;
+      });
+    }
+
+    var sunday = weekday(0);
+    var monday = weekday(1);
+    var tuesday = weekday(2);
+    var wednesday = weekday(3);
+    var thursday = weekday(4);
+    var friday = weekday(5);
+    var saturday = weekday(6);
+
+    var sundays = sunday.range;
+    var mondays = monday.range;
+    var tuesdays = tuesday.range;
+    var wednesdays = wednesday.range;
+    var thursdays = thursday.range;
+    var fridays = friday.range;
+    var saturdays = saturday.range;
+
+    var month = newInterval(function(date) {
+      date.setDate(1);
+      date.setHours(0, 0, 0, 0);
+    }, function(date, step) {
+      date.setMonth(date.getMonth() + step);
+    }, function(start, end) {
+      return end.getMonth() - start.getMonth() + (end.getFullYear() - start.getFullYear()) * 12;
+    }, function(date) {
+      return date.getMonth();
+    });
+
+    var timeMonth = month;
+    var months = month.range;
+
+    var year = newInterval(function(date) {
+      date.setMonth(0, 1);
+      date.setHours(0, 0, 0, 0);
+    }, function(date, step) {
+      date.setFullYear(date.getFullYear() + step);
+    }, function(start, end) {
+      return end.getFullYear() - start.getFullYear();
+    }, function(date) {
+      return date.getFullYear();
+    });
+
+    // An optimized implementation for this simple case.
+    year.every = function(k) {
+      return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : newInterval(function(date) {
+        date.setFullYear(Math.floor(date.getFullYear() / k) * k);
+        date.setMonth(0, 1);
+        date.setHours(0, 0, 0, 0);
+      }, function(date, step) {
+        date.setFullYear(date.getFullYear() + step * k);
+      });
+    };
+
+    var timeYear = year;
+    var years = year.range;
+
+    var utcMinute = newInterval(function(date) {
+      date.setUTCSeconds(0, 0);
+    }, function(date, step) {
+      date.setTime(+date + step * durationMinute);
+    }, function(start, end) {
+      return (end - start) / durationMinute;
+    }, function(date) {
+      return date.getUTCMinutes();
+    });
+
+    var utcMinute$1 = utcMinute;
+    var utcMinutes = utcMinute.range;
+
+    var utcHour = newInterval(function(date) {
+      date.setUTCMinutes(0, 0, 0);
+    }, function(date, step) {
+      date.setTime(+date + step * durationHour);
+    }, function(start, end) {
+      return (end - start) / durationHour;
+    }, function(date) {
+      return date.getUTCHours();
+    });
+
+    var utcHour$1 = utcHour;
+    var utcHours = utcHour.range;
+
+    var utcDay = newInterval(function(date) {
+      date.setUTCHours(0, 0, 0, 0);
+    }, function(date, step) {
+      date.setUTCDate(date.getUTCDate() + step);
+    }, function(start, end) {
+      return (end - start) / durationDay;
+    }, function(date) {
+      return date.getUTCDate() - 1;
+    });
+
+    var utcDay$1 = utcDay;
+    var utcDays = utcDay.range;
+
+    function utcWeekday(i) {
+      return newInterval(function(date) {
+        date.setUTCDate(date.getUTCDate() - (date.getUTCDay() + 7 - i) % 7);
+        date.setUTCHours(0, 0, 0, 0);
+      }, function(date, step) {
+        date.setUTCDate(date.getUTCDate() + step * 7);
+      }, function(start, end) {
+        return (end - start) / durationWeek;
+      });
+    }
+
+    var utcSunday = utcWeekday(0);
+    var utcMonday = utcWeekday(1);
+    var utcTuesday = utcWeekday(2);
+    var utcWednesday = utcWeekday(3);
+    var utcThursday = utcWeekday(4);
+    var utcFriday = utcWeekday(5);
+    var utcSaturday = utcWeekday(6);
+
+    var utcSundays = utcSunday.range;
+    var utcMondays = utcMonday.range;
+    var utcTuesdays = utcTuesday.range;
+    var utcWednesdays = utcWednesday.range;
+    var utcThursdays = utcThursday.range;
+    var utcFridays = utcFriday.range;
+    var utcSaturdays = utcSaturday.range;
+
+    var utcMonth = newInterval(function(date) {
+      date.setUTCDate(1);
+      date.setUTCHours(0, 0, 0, 0);
+    }, function(date, step) {
+      date.setUTCMonth(date.getUTCMonth() + step);
+    }, function(start, end) {
+      return end.getUTCMonth() - start.getUTCMonth() + (end.getUTCFullYear() - start.getUTCFullYear()) * 12;
+    }, function(date) {
+      return date.getUTCMonth();
+    });
+
+    var utcMonth$1 = utcMonth;
+    var utcMonths = utcMonth.range;
+
+    var utcYear = newInterval(function(date) {
+      date.setUTCMonth(0, 1);
+      date.setUTCHours(0, 0, 0, 0);
+    }, function(date, step) {
+      date.setUTCFullYear(date.getUTCFullYear() + step);
+    }, function(start, end) {
+      return end.getUTCFullYear() - start.getUTCFullYear();
+    }, function(date) {
+      return date.getUTCFullYear();
+    });
+
+    // An optimized implementation for this simple case.
+    utcYear.every = function(k) {
+      return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : newInterval(function(date) {
+        date.setUTCFullYear(Math.floor(date.getUTCFullYear() / k) * k);
+        date.setUTCMonth(0, 1);
+        date.setUTCHours(0, 0, 0, 0);
+      }, function(date, step) {
+        date.setUTCFullYear(date.getUTCFullYear() + step * k);
+      });
+    };
+
+    var utcYear$1 = utcYear;
+    var utcYears = utcYear.range;
+
+    function ticker(year, month, week, day, hour, minute) {
+
+      const tickIntervals = [
+        [utcSecond,  1,      durationSecond],
+        [utcSecond,  5,  5 * durationSecond],
+        [utcSecond, 15, 15 * durationSecond],
+        [utcSecond, 30, 30 * durationSecond],
+        [minute,  1,      durationMinute],
+        [minute,  5,  5 * durationMinute],
+        [minute, 15, 15 * durationMinute],
+        [minute, 30, 30 * durationMinute],
+        [  hour,  1,      durationHour  ],
+        [  hour,  3,  3 * durationHour  ],
+        [  hour,  6,  6 * durationHour  ],
+        [  hour, 12, 12 * durationHour  ],
+        [   day,  1,      durationDay   ],
+        [   day,  2,  2 * durationDay   ],
+        [  week,  1,      durationWeek  ],
+        [ month,  1,      durationMonth ],
+        [ month,  3,  3 * durationMonth ],
+        [  year,  1,      durationYear  ]
+      ];
+
+      function ticks(start, stop, count) {
+        const reverse = stop < start;
+        if (reverse) [start, stop] = [stop, start];
+        const interval = count && typeof count.range === "function" ? count : tickInterval(start, stop, count);
+        const ticks = interval ? interval.range(start, +stop + 1) : []; // inclusive stop
+        return reverse ? ticks.reverse() : ticks;
+      }
+
+      function tickInterval(start, stop, count) {
+        const target = Math.abs(stop - start) / count;
+        const i = bisector(([,, step]) => step).right(tickIntervals, target);
+        if (i === tickIntervals.length) return year.every(tickStep(start / durationYear, stop / durationYear, count));
+        if (i === 0) return millisecond$1.every(Math.max(tickStep(start, stop, count), 1));
+        const [t, step] = tickIntervals[target / tickIntervals[i - 1][2] < tickIntervals[i][2] / target ? i - 1 : i];
+        return t.every(step);
+      }
+
+      return [ticks, tickInterval];
+    }
+
+    const [utcTicks, utcTickInterval] = ticker(utcYear$1, utcMonth$1, utcSunday, utcDay$1, utcHour$1, utcMinute$1);
+    const [timeTicks, timeTickInterval] = ticker(timeYear, timeMonth, sunday, timeDay, timeHour, timeMinute);
+
+    function localDate(d) {
+      if (0 <= d.y && d.y < 100) {
+        var date = new Date(-1, d.m, d.d, d.H, d.M, d.S, d.L);
+        date.setFullYear(d.y);
+        return date;
+      }
+      return new Date(d.y, d.m, d.d, d.H, d.M, d.S, d.L);
+    }
+
+    function utcDate(d) {
+      if (0 <= d.y && d.y < 100) {
+        var date = new Date(Date.UTC(-1, d.m, d.d, d.H, d.M, d.S, d.L));
+        date.setUTCFullYear(d.y);
+        return date;
+      }
+      return new Date(Date.UTC(d.y, d.m, d.d, d.H, d.M, d.S, d.L));
+    }
+
+    function newDate(y, m, d) {
+      return {y: y, m: m, d: d, H: 0, M: 0, S: 0, L: 0};
+    }
+
+    function formatLocale(locale) {
+      var locale_dateTime = locale.dateTime,
+          locale_date = locale.date,
+          locale_time = locale.time,
+          locale_periods = locale.periods,
+          locale_weekdays = locale.days,
+          locale_shortWeekdays = locale.shortDays,
+          locale_months = locale.months,
+          locale_shortMonths = locale.shortMonths;
+
+      var periodRe = formatRe(locale_periods),
+          periodLookup = formatLookup(locale_periods),
+          weekdayRe = formatRe(locale_weekdays),
+          weekdayLookup = formatLookup(locale_weekdays),
+          shortWeekdayRe = formatRe(locale_shortWeekdays),
+          shortWeekdayLookup = formatLookup(locale_shortWeekdays),
+          monthRe = formatRe(locale_months),
+          monthLookup = formatLookup(locale_months),
+          shortMonthRe = formatRe(locale_shortMonths),
+          shortMonthLookup = formatLookup(locale_shortMonths);
+
+      var formats = {
+        "a": formatShortWeekday,
+        "A": formatWeekday,
+        "b": formatShortMonth,
+        "B": formatMonth,
+        "c": null,
+        "d": formatDayOfMonth,
+        "e": formatDayOfMonth,
+        "f": formatMicroseconds,
+        "g": formatYearISO,
+        "G": formatFullYearISO,
+        "H": formatHour24,
+        "I": formatHour12,
+        "j": formatDayOfYear,
+        "L": formatMilliseconds,
+        "m": formatMonthNumber,
+        "M": formatMinutes,
+        "p": formatPeriod,
+        "q": formatQuarter,
+        "Q": formatUnixTimestamp,
+        "s": formatUnixTimestampSeconds,
+        "S": formatSeconds,
+        "u": formatWeekdayNumberMonday,
+        "U": formatWeekNumberSunday,
+        "V": formatWeekNumberISO,
+        "w": formatWeekdayNumberSunday,
+        "W": formatWeekNumberMonday,
+        "x": null,
+        "X": null,
+        "y": formatYear,
+        "Y": formatFullYear,
+        "Z": formatZone,
+        "%": formatLiteralPercent
+      };
+
+      var utcFormats = {
+        "a": formatUTCShortWeekday,
+        "A": formatUTCWeekday,
+        "b": formatUTCShortMonth,
+        "B": formatUTCMonth,
+        "c": null,
+        "d": formatUTCDayOfMonth,
+        "e": formatUTCDayOfMonth,
+        "f": formatUTCMicroseconds,
+        "g": formatUTCYearISO,
+        "G": formatUTCFullYearISO,
+        "H": formatUTCHour24,
+        "I": formatUTCHour12,
+        "j": formatUTCDayOfYear,
+        "L": formatUTCMilliseconds,
+        "m": formatUTCMonthNumber,
+        "M": formatUTCMinutes,
+        "p": formatUTCPeriod,
+        "q": formatUTCQuarter,
+        "Q": formatUnixTimestamp,
+        "s": formatUnixTimestampSeconds,
+        "S": formatUTCSeconds,
+        "u": formatUTCWeekdayNumberMonday,
+        "U": formatUTCWeekNumberSunday,
+        "V": formatUTCWeekNumberISO,
+        "w": formatUTCWeekdayNumberSunday,
+        "W": formatUTCWeekNumberMonday,
+        "x": null,
+        "X": null,
+        "y": formatUTCYear,
+        "Y": formatUTCFullYear,
+        "Z": formatUTCZone,
+        "%": formatLiteralPercent
+      };
+
+      var parses = {
+        "a": parseShortWeekday,
+        "A": parseWeekday,
+        "b": parseShortMonth,
+        "B": parseMonth,
+        "c": parseLocaleDateTime,
+        "d": parseDayOfMonth,
+        "e": parseDayOfMonth,
+        "f": parseMicroseconds,
+        "g": parseYear,
+        "G": parseFullYear,
+        "H": parseHour24,
+        "I": parseHour24,
+        "j": parseDayOfYear,
+        "L": parseMilliseconds,
+        "m": parseMonthNumber,
+        "M": parseMinutes,
+        "p": parsePeriod,
+        "q": parseQuarter,
+        "Q": parseUnixTimestamp,
+        "s": parseUnixTimestampSeconds,
+        "S": parseSeconds,
+        "u": parseWeekdayNumberMonday,
+        "U": parseWeekNumberSunday,
+        "V": parseWeekNumberISO,
+        "w": parseWeekdayNumberSunday,
+        "W": parseWeekNumberMonday,
+        "x": parseLocaleDate,
+        "X": parseLocaleTime,
+        "y": parseYear,
+        "Y": parseFullYear,
+        "Z": parseZone,
+        "%": parseLiteralPercent
+      };
+
+      // These recursive directive definitions must be deferred.
+      formats.x = newFormat(locale_date, formats);
+      formats.X = newFormat(locale_time, formats);
+      formats.c = newFormat(locale_dateTime, formats);
+      utcFormats.x = newFormat(locale_date, utcFormats);
+      utcFormats.X = newFormat(locale_time, utcFormats);
+      utcFormats.c = newFormat(locale_dateTime, utcFormats);
+
+      function newFormat(specifier, formats) {
+        return function(date) {
+          var string = [],
+              i = -1,
+              j = 0,
+              n = specifier.length,
+              c,
+              pad,
+              format;
+
+          if (!(date instanceof Date)) date = new Date(+date);
+
+          while (++i < n) {
+            if (specifier.charCodeAt(i) === 37) {
+              string.push(specifier.slice(j, i));
+              if ((pad = pads[c = specifier.charAt(++i)]) != null) c = specifier.charAt(++i);
+              else pad = c === "e" ? " " : "0";
+              if (format = formats[c]) c = format(date, pad);
+              string.push(c);
+              j = i + 1;
+            }
+          }
+
+          string.push(specifier.slice(j, i));
+          return string.join("");
+        };
+      }
+
+      function newParse(specifier, Z) {
+        return function(string) {
+          var d = newDate(1900, undefined, 1),
+              i = parseSpecifier(d, specifier, string += "", 0),
+              week, day;
+          if (i != string.length) return null;
+
+          // If a UNIX timestamp is specified, return it.
+          if ("Q" in d) return new Date(d.Q);
+          if ("s" in d) return new Date(d.s * 1000 + ("L" in d ? d.L : 0));
+
+          // If this is utcParse, never use the local timezone.
+          if (Z && !("Z" in d)) d.Z = 0;
+
+          // The am-pm flag is 0 for AM, and 1 for PM.
+          if ("p" in d) d.H = d.H % 12 + d.p * 12;
+
+          // If the month was not specified, inherit from the quarter.
+          if (d.m === undefined) d.m = "q" in d ? d.q : 0;
+
+          // Convert day-of-week and week-of-year to day-of-year.
+          if ("V" in d) {
+            if (d.V < 1 || d.V > 53) return null;
+            if (!("w" in d)) d.w = 1;
+            if ("Z" in d) {
+              week = utcDate(newDate(d.y, 0, 1)), day = week.getUTCDay();
+              week = day > 4 || day === 0 ? utcMonday.ceil(week) : utcMonday(week);
+              week = utcDay$1.offset(week, (d.V - 1) * 7);
+              d.y = week.getUTCFullYear();
+              d.m = week.getUTCMonth();
+              d.d = week.getUTCDate() + (d.w + 6) % 7;
+            } else {
+              week = localDate(newDate(d.y, 0, 1)), day = week.getDay();
+              week = day > 4 || day === 0 ? monday.ceil(week) : monday(week);
+              week = timeDay.offset(week, (d.V - 1) * 7);
+              d.y = week.getFullYear();
+              d.m = week.getMonth();
+              d.d = week.getDate() + (d.w + 6) % 7;
+            }
+          } else if ("W" in d || "U" in d) {
+            if (!("w" in d)) d.w = "u" in d ? d.u % 7 : "W" in d ? 1 : 0;
+            day = "Z" in d ? utcDate(newDate(d.y, 0, 1)).getUTCDay() : localDate(newDate(d.y, 0, 1)).getDay();
+            d.m = 0;
+            d.d = "W" in d ? (d.w + 6) % 7 + d.W * 7 - (day + 5) % 7 : d.w + d.U * 7 - (day + 6) % 7;
+          }
+
+          // If a time zone is specified, all fields are interpreted as UTC and then
+          // offset according to the specified time zone.
+          if ("Z" in d) {
+            d.H += d.Z / 100 | 0;
+            d.M += d.Z % 100;
+            return utcDate(d);
+          }
+
+          // Otherwise, all fields are in local time.
+          return localDate(d);
+        };
+      }
+
+      function parseSpecifier(d, specifier, string, j) {
+        var i = 0,
+            n = specifier.length,
+            m = string.length,
+            c,
+            parse;
+
+        while (i < n) {
+          if (j >= m) return -1;
+          c = specifier.charCodeAt(i++);
+          if (c === 37) {
+            c = specifier.charAt(i++);
+            parse = parses[c in pads ? specifier.charAt(i++) : c];
+            if (!parse || ((j = parse(d, string, j)) < 0)) return -1;
+          } else if (c != string.charCodeAt(j++)) {
+            return -1;
+          }
+        }
+
+        return j;
+      }
+
+      function parsePeriod(d, string, i) {
+        var n = periodRe.exec(string.slice(i));
+        return n ? (d.p = periodLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+      }
+
+      function parseShortWeekday(d, string, i) {
+        var n = shortWeekdayRe.exec(string.slice(i));
+        return n ? (d.w = shortWeekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+      }
+
+      function parseWeekday(d, string, i) {
+        var n = weekdayRe.exec(string.slice(i));
+        return n ? (d.w = weekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+      }
+
+      function parseShortMonth(d, string, i) {
+        var n = shortMonthRe.exec(string.slice(i));
+        return n ? (d.m = shortMonthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+      }
+
+      function parseMonth(d, string, i) {
+        var n = monthRe.exec(string.slice(i));
+        return n ? (d.m = monthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+      }
+
+      function parseLocaleDateTime(d, string, i) {
+        return parseSpecifier(d, locale_dateTime, string, i);
+      }
+
+      function parseLocaleDate(d, string, i) {
+        return parseSpecifier(d, locale_date, string, i);
+      }
+
+      function parseLocaleTime(d, string, i) {
+        return parseSpecifier(d, locale_time, string, i);
+      }
+
+      function formatShortWeekday(d) {
+        return locale_shortWeekdays[d.getDay()];
+      }
+
+      function formatWeekday(d) {
+        return locale_weekdays[d.getDay()];
+      }
+
+      function formatShortMonth(d) {
+        return locale_shortMonths[d.getMonth()];
+      }
+
+      function formatMonth(d) {
+        return locale_months[d.getMonth()];
+      }
+
+      function formatPeriod(d) {
+        return locale_periods[+(d.getHours() >= 12)];
+      }
+
+      function formatQuarter(d) {
+        return 1 + ~~(d.getMonth() / 3);
+      }
+
+      function formatUTCShortWeekday(d) {
+        return locale_shortWeekdays[d.getUTCDay()];
+      }
+
+      function formatUTCWeekday(d) {
+        return locale_weekdays[d.getUTCDay()];
+      }
+
+      function formatUTCShortMonth(d) {
+        return locale_shortMonths[d.getUTCMonth()];
+      }
+
+      function formatUTCMonth(d) {
+        return locale_months[d.getUTCMonth()];
+      }
+
+      function formatUTCPeriod(d) {
+        return locale_periods[+(d.getUTCHours() >= 12)];
+      }
+
+      function formatUTCQuarter(d) {
+        return 1 + ~~(d.getUTCMonth() / 3);
+      }
+
+      return {
+        format: function(specifier) {
+          var f = newFormat(specifier += "", formats);
+          f.toString = function() { return specifier; };
+          return f;
+        },
+        parse: function(specifier) {
+          var p = newParse(specifier += "", false);
+          p.toString = function() { return specifier; };
+          return p;
+        },
+        utcFormat: function(specifier) {
+          var f = newFormat(specifier += "", utcFormats);
+          f.toString = function() { return specifier; };
+          return f;
+        },
+        utcParse: function(specifier) {
+          var p = newParse(specifier += "", true);
+          p.toString = function() { return specifier; };
+          return p;
+        }
+      };
+    }
+
+    var pads = {"-": "", "_": " ", "0": "0"},
+        numberRe = /^\s*\d+/, // note: ignores next directive
+        percentRe = /^%/,
+        requoteRe = /[\\^$*+?|[\]().{}]/g;
+
+    function pad(value, fill, width) {
+      var sign = value < 0 ? "-" : "",
+          string = (sign ? -value : value) + "",
+          length = string.length;
+      return sign + (length < width ? new Array(width - length + 1).join(fill) + string : string);
+    }
+
+    function requote(s) {
+      return s.replace(requoteRe, "\\$&");
+    }
+
+    function formatRe(names) {
+      return new RegExp("^(?:" + names.map(requote).join("|") + ")", "i");
+    }
+
+    function formatLookup(names) {
+      return new Map(names.map((name, i) => [name.toLowerCase(), i]));
+    }
+
+    function parseWeekdayNumberSunday(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 1));
+      return n ? (d.w = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseWeekdayNumberMonday(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 1));
+      return n ? (d.u = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseWeekNumberSunday(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.U = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseWeekNumberISO(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.V = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseWeekNumberMonday(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.W = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseFullYear(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 4));
+      return n ? (d.y = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseYear(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.y = +n[0] + (+n[0] > 68 ? 1900 : 2000), i + n[0].length) : -1;
+    }
+
+    function parseZone(d, string, i) {
+      var n = /^(Z)|([+-]\d\d)(?::?(\d\d))?/.exec(string.slice(i, i + 6));
+      return n ? (d.Z = n[1] ? 0 : -(n[2] + (n[3] || "00")), i + n[0].length) : -1;
+    }
+
+    function parseQuarter(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 1));
+      return n ? (d.q = n[0] * 3 - 3, i + n[0].length) : -1;
+    }
+
+    function parseMonthNumber(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.m = n[0] - 1, i + n[0].length) : -1;
+    }
+
+    function parseDayOfMonth(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.d = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseDayOfYear(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 3));
+      return n ? (d.m = 0, d.d = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseHour24(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.H = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseMinutes(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.M = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseSeconds(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 2));
+      return n ? (d.S = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseMilliseconds(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 3));
+      return n ? (d.L = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseMicroseconds(d, string, i) {
+      var n = numberRe.exec(string.slice(i, i + 6));
+      return n ? (d.L = Math.floor(n[0] / 1000), i + n[0].length) : -1;
+    }
+
+    function parseLiteralPercent(d, string, i) {
+      var n = percentRe.exec(string.slice(i, i + 1));
+      return n ? i + n[0].length : -1;
+    }
+
+    function parseUnixTimestamp(d, string, i) {
+      var n = numberRe.exec(string.slice(i));
+      return n ? (d.Q = +n[0], i + n[0].length) : -1;
+    }
+
+    function parseUnixTimestampSeconds(d, string, i) {
+      var n = numberRe.exec(string.slice(i));
+      return n ? (d.s = +n[0], i + n[0].length) : -1;
+    }
+
+    function formatDayOfMonth(d, p) {
+      return pad(d.getDate(), p, 2);
+    }
+
+    function formatHour24(d, p) {
+      return pad(d.getHours(), p, 2);
+    }
+
+    function formatHour12(d, p) {
+      return pad(d.getHours() % 12 || 12, p, 2);
+    }
+
+    function formatDayOfYear(d, p) {
+      return pad(1 + timeDay.count(timeYear(d), d), p, 3);
+    }
+
+    function formatMilliseconds(d, p) {
+      return pad(d.getMilliseconds(), p, 3);
+    }
+
+    function formatMicroseconds(d, p) {
+      return formatMilliseconds(d, p) + "000";
+    }
+
+    function formatMonthNumber(d, p) {
+      return pad(d.getMonth() + 1, p, 2);
+    }
+
+    function formatMinutes(d, p) {
+      return pad(d.getMinutes(), p, 2);
+    }
+
+    function formatSeconds(d, p) {
+      return pad(d.getSeconds(), p, 2);
+    }
+
+    function formatWeekdayNumberMonday(d) {
+      var day = d.getDay();
+      return day === 0 ? 7 : day;
+    }
+
+    function formatWeekNumberSunday(d, p) {
+      return pad(sunday.count(timeYear(d) - 1, d), p, 2);
+    }
+
+    function dISO(d) {
+      var day = d.getDay();
+      return (day >= 4 || day === 0) ? thursday(d) : thursday.ceil(d);
+    }
+
+    function formatWeekNumberISO(d, p) {
+      d = dISO(d);
+      return pad(thursday.count(timeYear(d), d) + (timeYear(d).getDay() === 4), p, 2);
+    }
+
+    function formatWeekdayNumberSunday(d) {
+      return d.getDay();
+    }
+
+    function formatWeekNumberMonday(d, p) {
+      return pad(monday.count(timeYear(d) - 1, d), p, 2);
+    }
+
+    function formatYear(d, p) {
+      return pad(d.getFullYear() % 100, p, 2);
+    }
+
+    function formatYearISO(d, p) {
+      d = dISO(d);
+      return pad(d.getFullYear() % 100, p, 2);
+    }
+
+    function formatFullYear(d, p) {
+      return pad(d.getFullYear() % 10000, p, 4);
+    }
+
+    function formatFullYearISO(d, p) {
+      var day = d.getDay();
+      d = (day >= 4 || day === 0) ? thursday(d) : thursday.ceil(d);
+      return pad(d.getFullYear() % 10000, p, 4);
+    }
+
+    function formatZone(d) {
+      var z = d.getTimezoneOffset();
+      return (z > 0 ? "-" : (z *= -1, "+"))
+          + pad(z / 60 | 0, "0", 2)
+          + pad(z % 60, "0", 2);
+    }
+
+    function formatUTCDayOfMonth(d, p) {
+      return pad(d.getUTCDate(), p, 2);
+    }
+
+    function formatUTCHour24(d, p) {
+      return pad(d.getUTCHours(), p, 2);
+    }
+
+    function formatUTCHour12(d, p) {
+      return pad(d.getUTCHours() % 12 || 12, p, 2);
+    }
+
+    function formatUTCDayOfYear(d, p) {
+      return pad(1 + utcDay$1.count(utcYear$1(d), d), p, 3);
+    }
+
+    function formatUTCMilliseconds(d, p) {
+      return pad(d.getUTCMilliseconds(), p, 3);
+    }
+
+    function formatUTCMicroseconds(d, p) {
+      return formatUTCMilliseconds(d, p) + "000";
+    }
+
+    function formatUTCMonthNumber(d, p) {
+      return pad(d.getUTCMonth() + 1, p, 2);
+    }
+
+    function formatUTCMinutes(d, p) {
+      return pad(d.getUTCMinutes(), p, 2);
+    }
+
+    function formatUTCSeconds(d, p) {
+      return pad(d.getUTCSeconds(), p, 2);
+    }
+
+    function formatUTCWeekdayNumberMonday(d) {
+      var dow = d.getUTCDay();
+      return dow === 0 ? 7 : dow;
+    }
+
+    function formatUTCWeekNumberSunday(d, p) {
+      return pad(utcSunday.count(utcYear$1(d) - 1, d), p, 2);
+    }
+
+    function UTCdISO(d) {
+      var day = d.getUTCDay();
+      return (day >= 4 || day === 0) ? utcThursday(d) : utcThursday.ceil(d);
+    }
+
+    function formatUTCWeekNumberISO(d, p) {
+      d = UTCdISO(d);
+      return pad(utcThursday.count(utcYear$1(d), d) + (utcYear$1(d).getUTCDay() === 4), p, 2);
+    }
+
+    function formatUTCWeekdayNumberSunday(d) {
+      return d.getUTCDay();
+    }
+
+    function formatUTCWeekNumberMonday(d, p) {
+      return pad(utcMonday.count(utcYear$1(d) - 1, d), p, 2);
+    }
+
+    function formatUTCYear(d, p) {
+      return pad(d.getUTCFullYear() % 100, p, 2);
+    }
+
+    function formatUTCYearISO(d, p) {
+      d = UTCdISO(d);
+      return pad(d.getUTCFullYear() % 100, p, 2);
+    }
+
+    function formatUTCFullYear(d, p) {
+      return pad(d.getUTCFullYear() % 10000, p, 4);
+    }
+
+    function formatUTCFullYearISO(d, p) {
+      var day = d.getUTCDay();
+      d = (day >= 4 || day === 0) ? utcThursday(d) : utcThursday.ceil(d);
+      return pad(d.getUTCFullYear() % 10000, p, 4);
+    }
+
+    function formatUTCZone() {
+      return "+0000";
+    }
+
+    function formatLiteralPercent() {
+      return "%";
+    }
+
+    function formatUnixTimestamp(d) {
+      return +d;
+    }
+
+    function formatUnixTimestampSeconds(d) {
+      return Math.floor(+d / 1000);
+    }
+
+    var locale;
+    var timeFormat;
+    var timeParse;
+    var utcFormat;
+    var utcParse;
+
+    defaultLocale({
+      dateTime: "%x, %X",
+      date: "%-m/%-d/%Y",
+      time: "%-I:%M:%S %p",
+      periods: ["AM", "PM"],
+      days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    });
+
+    function defaultLocale(definition) {
+      locale = formatLocale(definition);
+      timeFormat = locale.format;
+      timeParse = locale.parse;
+      utcFormat = locale.utcFormat;
+      utcParse = locale.utcParse;
+      return locale;
+    }
+
+    var isoSpecifier = "%Y-%m-%dT%H:%M:%S.%LZ";
+
+    function formatIsoNative(date) {
+      return date.toISOString();
+    }
+
+    var formatIso = Date.prototype.toISOString
+        ? formatIsoNative
+        : utcFormat(isoSpecifier);
+
+    var formatIso$1 = formatIso;
+
+    function parseIsoNative(string) {
+      var date = new Date(string);
+      return isNaN(date) ? null : date;
+    }
+
+    var parseIso = +new Date("2000-01-01T00:00:00.000Z")
+        ? parseIsoNative
+        : utcParse(isoSpecifier);
+
+    var parseIso$1 = parseIso;
 
     function date(t) {
       return new Date(t);
@@ -86619,11 +87742,11 @@ var app = (function () {
     }
 
     function time() {
-      return initRange.apply(calendar(timeTicks$1, timeTickInterval$1, timeYear$1, timeMonth, sunday$1, timeDay$1, timeHour, timeMinute, utcSecond, timeFormat$3).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
+      return initRange.apply(calendar(timeTicks, timeTickInterval, timeYear, timeMonth, sunday, timeDay, timeHour, timeMinute, utcSecond, timeFormat).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
     }
 
     function utcTime() {
-      return initRange.apply(calendar(utcTicks$1, utcTickInterval$1, utcYear$3, utcMonth$3, utcSunday$1, utcDay$3, utcHour$3, utcMinute$3, utcSecond, utcFormat$2).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]), arguments);
+      return initRange.apply(calendar(utcTicks, utcTickInterval, utcYear$1, utcMonth$1, utcSunday, utcDay$1, utcHour$1, utcMinute$1, utcSecond, utcFormat).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]), arguments);
     }
 
     function transformer$1() {
@@ -86660,7 +87783,7 @@ var app = (function () {
         };
       }
 
-      scale.range = range(interpolate$4);
+      scale.range = range(interpolate);
 
       scale.rangeRound = range(interpolateRound);
 
@@ -86731,14 +87854,14 @@ var app = (function () {
           interpolator = identity$3;
 
       function scale(x) {
-        if (x != null && !isNaN(x = +x)) return interpolator((bisect$2(domain, x, 1) - 1) / (domain.length - 1));
+        if (x != null && !isNaN(x = +x)) return interpolator((bisect(domain, x, 1) - 1) / (domain.length - 1));
       }
 
       scale.domain = function(_) {
         if (!arguments.length) return domain.slice();
         domain = [];
         for (let d of _) if (d != null && !isNaN(d = +d)) domain.push(d);
-        domain.sort(ascending$6);
+        domain.sort(ascending$3);
         return scale;
       };
 
@@ -86751,7 +87874,7 @@ var app = (function () {
       };
 
       scale.quantiles = function(n) {
-        return Array.from({length: n + 1}, (_, i) => quantile$3(domain, i / n));
+        return Array.from({length: n + 1}, (_, i) => quantile$1(domain, i / n));
       };
 
       scale.copy = function() {
@@ -86795,11 +87918,11 @@ var app = (function () {
       function range(interpolate) {
         return function(_) {
           var r0, r1, r2;
-          return arguments.length ? ([r0, r1, r2] = _, interpolator = piecewise$1(interpolate, [r0, r1, r2]), scale) : [interpolator(0), interpolator(0.5), interpolator(1)];
+          return arguments.length ? ([r0, r1, r2] = _, interpolator = piecewise(interpolate, [r0, r1, r2]), scale) : [interpolator(0), interpolator(0.5), interpolator(1)];
         };
       }
 
-      scale.range = range(interpolate$4);
+      scale.range = range(interpolate);
 
       scale.rangeRound = range(interpolateRound);
 
@@ -89329,1110 +90452,6 @@ var app = (function () {
       return none(series).reverse();
     }
 
-    var t0 = new Date,
-        t1 = new Date;
-
-    function newInterval(floori, offseti, count, field) {
-
-      function interval(date) {
-        return floori(date = arguments.length === 0 ? new Date : new Date(+date)), date;
-      }
-
-      interval.floor = function(date) {
-        return floori(date = new Date(+date)), date;
-      };
-
-      interval.ceil = function(date) {
-        return floori(date = new Date(date - 1)), offseti(date, 1), floori(date), date;
-      };
-
-      interval.round = function(date) {
-        var d0 = interval(date),
-            d1 = interval.ceil(date);
-        return date - d0 < d1 - date ? d0 : d1;
-      };
-
-      interval.offset = function(date, step) {
-        return offseti(date = new Date(+date), step == null ? 1 : Math.floor(step)), date;
-      };
-
-      interval.range = function(start, stop, step) {
-        var range = [], previous;
-        start = interval.ceil(start);
-        step = step == null ? 1 : Math.floor(step);
-        if (!(start < stop) || !(step > 0)) return range; // also handles Invalid Date
-        do range.push(previous = new Date(+start)), offseti(start, step), floori(start);
-        while (previous < start && start < stop);
-        return range;
-      };
-
-      interval.filter = function(test) {
-        return newInterval(function(date) {
-          if (date >= date) while (floori(date), !test(date)) date.setTime(date - 1);
-        }, function(date, step) {
-          if (date >= date) {
-            if (step < 0) while (++step <= 0) {
-              while (offseti(date, -1), !test(date)) {} // eslint-disable-line no-empty
-            } else while (--step >= 0) {
-              while (offseti(date, +1), !test(date)) {} // eslint-disable-line no-empty
-            }
-          }
-        });
-      };
-
-      if (count) {
-        interval.count = function(start, end) {
-          t0.setTime(+start), t1.setTime(+end);
-          floori(t0), floori(t1);
-          return Math.floor(count(t0, t1));
-        };
-
-        interval.every = function(step) {
-          step = Math.floor(step);
-          return !isFinite(step) || !(step > 0) ? null
-              : !(step > 1) ? interval
-              : interval.filter(field
-                  ? function(d) { return field(d) % step === 0; }
-                  : function(d) { return interval.count(0, d) % step === 0; });
-        };
-      }
-
-      return interval;
-    }
-
-    var millisecond = newInterval(function() {
-      // noop
-    }, function(date, step) {
-      date.setTime(+date + step);
-    }, function(start, end) {
-      return end - start;
-    });
-
-    // An optimized implementation for this simple case.
-    millisecond.every = function(k) {
-      k = Math.floor(k);
-      if (!isFinite(k) || !(k > 0)) return null;
-      if (!(k > 1)) return millisecond;
-      return newInterval(function(date) {
-        date.setTime(Math.floor(date / k) * k);
-      }, function(date, step) {
-        date.setTime(+date + step * k);
-      }, function(start, end) {
-        return (end - start) / k;
-      });
-    };
-
-    var millisecond$1 = millisecond;
-    var milliseconds = millisecond.range;
-
-    const durationSecond = 1000;
-    const durationMinute = durationSecond * 60;
-    const durationHour = durationMinute * 60;
-    const durationDay = durationHour * 24;
-    const durationWeek = durationDay * 7;
-    const durationMonth = durationDay * 30;
-    const durationYear = durationDay * 365;
-
-    var second = newInterval(function(date) {
-      date.setTime(date - date.getMilliseconds());
-    }, function(date, step) {
-      date.setTime(+date + step * durationSecond);
-    }, function(start, end) {
-      return (end - start) / durationSecond;
-    }, function(date) {
-      return date.getUTCSeconds();
-    });
-
-    var second$1 = second;
-    var seconds = second.range;
-
-    var minute = newInterval(function(date) {
-      date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond);
-    }, function(date, step) {
-      date.setTime(+date + step * durationMinute);
-    }, function(start, end) {
-      return (end - start) / durationMinute;
-    }, function(date) {
-      return date.getMinutes();
-    });
-
-    var minute$1 = minute;
-    var minutes = minute.range;
-
-    var hour = newInterval(function(date) {
-      date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond - date.getMinutes() * durationMinute);
-    }, function(date, step) {
-      date.setTime(+date + step * durationHour);
-    }, function(start, end) {
-      return (end - start) / durationHour;
-    }, function(date) {
-      return date.getHours();
-    });
-
-    var hour$1 = hour;
-    var hours = hour.range;
-
-    var day = newInterval(
-      date => date.setHours(0, 0, 0, 0),
-      (date, step) => date.setDate(date.getDate() + step),
-      (start, end) => (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationDay,
-      date => date.getDate() - 1
-    );
-
-    var timeDay = day;
-    var days = day.range;
-
-    function weekday(i) {
-      return newInterval(function(date) {
-        date.setDate(date.getDate() - (date.getDay() + 7 - i) % 7);
-        date.setHours(0, 0, 0, 0);
-      }, function(date, step) {
-        date.setDate(date.getDate() + step * 7);
-      }, function(start, end) {
-        return (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationWeek;
-      });
-    }
-
-    var sunday = weekday(0);
-    var monday = weekday(1);
-    var tuesday = weekday(2);
-    var wednesday = weekday(3);
-    var thursday = weekday(4);
-    var friday = weekday(5);
-    var saturday = weekday(6);
-
-    var sundays = sunday.range;
-    var mondays = monday.range;
-    var tuesdays = tuesday.range;
-    var wednesdays = wednesday.range;
-    var thursdays = thursday.range;
-    var fridays = friday.range;
-    var saturdays = saturday.range;
-
-    var month = newInterval(function(date) {
-      date.setDate(1);
-      date.setHours(0, 0, 0, 0);
-    }, function(date, step) {
-      date.setMonth(date.getMonth() + step);
-    }, function(start, end) {
-      return end.getMonth() - start.getMonth() + (end.getFullYear() - start.getFullYear()) * 12;
-    }, function(date) {
-      return date.getMonth();
-    });
-
-    var month$1 = month;
-    var months = month.range;
-
-    var year = newInterval(function(date) {
-      date.setMonth(0, 1);
-      date.setHours(0, 0, 0, 0);
-    }, function(date, step) {
-      date.setFullYear(date.getFullYear() + step);
-    }, function(start, end) {
-      return end.getFullYear() - start.getFullYear();
-    }, function(date) {
-      return date.getFullYear();
-    });
-
-    // An optimized implementation for this simple case.
-    year.every = function(k) {
-      return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : newInterval(function(date) {
-        date.setFullYear(Math.floor(date.getFullYear() / k) * k);
-        date.setMonth(0, 1);
-        date.setHours(0, 0, 0, 0);
-      }, function(date, step) {
-        date.setFullYear(date.getFullYear() + step * k);
-      });
-    };
-
-    var timeYear = year;
-    var years = year.range;
-
-    var utcMinute = newInterval(function(date) {
-      date.setUTCSeconds(0, 0);
-    }, function(date, step) {
-      date.setTime(+date + step * durationMinute);
-    }, function(start, end) {
-      return (end - start) / durationMinute;
-    }, function(date) {
-      return date.getUTCMinutes();
-    });
-
-    var utcMinute$1 = utcMinute;
-    var utcMinutes = utcMinute.range;
-
-    var utcHour = newInterval(function(date) {
-      date.setUTCMinutes(0, 0, 0);
-    }, function(date, step) {
-      date.setTime(+date + step * durationHour);
-    }, function(start, end) {
-      return (end - start) / durationHour;
-    }, function(date) {
-      return date.getUTCHours();
-    });
-
-    var utcHour$1 = utcHour;
-    var utcHours = utcHour.range;
-
-    var utcDay = newInterval(function(date) {
-      date.setUTCHours(0, 0, 0, 0);
-    }, function(date, step) {
-      date.setUTCDate(date.getUTCDate() + step);
-    }, function(start, end) {
-      return (end - start) / durationDay;
-    }, function(date) {
-      return date.getUTCDate() - 1;
-    });
-
-    var utcDay$1 = utcDay;
-    var utcDays = utcDay.range;
-
-    function utcWeekday(i) {
-      return newInterval(function(date) {
-        date.setUTCDate(date.getUTCDate() - (date.getUTCDay() + 7 - i) % 7);
-        date.setUTCHours(0, 0, 0, 0);
-      }, function(date, step) {
-        date.setUTCDate(date.getUTCDate() + step * 7);
-      }, function(start, end) {
-        return (end - start) / durationWeek;
-      });
-    }
-
-    var utcSunday = utcWeekday(0);
-    var utcMonday = utcWeekday(1);
-    var utcTuesday = utcWeekday(2);
-    var utcWednesday = utcWeekday(3);
-    var utcThursday = utcWeekday(4);
-    var utcFriday = utcWeekday(5);
-    var utcSaturday = utcWeekday(6);
-
-    var utcSundays = utcSunday.range;
-    var utcMondays = utcMonday.range;
-    var utcTuesdays = utcTuesday.range;
-    var utcWednesdays = utcWednesday.range;
-    var utcThursdays = utcThursday.range;
-    var utcFridays = utcFriday.range;
-    var utcSaturdays = utcSaturday.range;
-
-    var utcMonth = newInterval(function(date) {
-      date.setUTCDate(1);
-      date.setUTCHours(0, 0, 0, 0);
-    }, function(date, step) {
-      date.setUTCMonth(date.getUTCMonth() + step);
-    }, function(start, end) {
-      return end.getUTCMonth() - start.getUTCMonth() + (end.getUTCFullYear() - start.getUTCFullYear()) * 12;
-    }, function(date) {
-      return date.getUTCMonth();
-    });
-
-    var utcMonth$1 = utcMonth;
-    var utcMonths = utcMonth.range;
-
-    var utcYear = newInterval(function(date) {
-      date.setUTCMonth(0, 1);
-      date.setUTCHours(0, 0, 0, 0);
-    }, function(date, step) {
-      date.setUTCFullYear(date.getUTCFullYear() + step);
-    }, function(start, end) {
-      return end.getUTCFullYear() - start.getUTCFullYear();
-    }, function(date) {
-      return date.getUTCFullYear();
-    });
-
-    // An optimized implementation for this simple case.
-    utcYear.every = function(k) {
-      return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : newInterval(function(date) {
-        date.setUTCFullYear(Math.floor(date.getUTCFullYear() / k) * k);
-        date.setUTCMonth(0, 1);
-        date.setUTCHours(0, 0, 0, 0);
-      }, function(date, step) {
-        date.setUTCFullYear(date.getUTCFullYear() + step * k);
-      });
-    };
-
-    var utcYear$1 = utcYear;
-    var utcYears = utcYear.range;
-
-    function ticker(year, month, week, day, hour, minute) {
-
-      const tickIntervals = [
-        [second$1,  1,      durationSecond],
-        [second$1,  5,  5 * durationSecond],
-        [second$1, 15, 15 * durationSecond],
-        [second$1, 30, 30 * durationSecond],
-        [minute,  1,      durationMinute],
-        [minute,  5,  5 * durationMinute],
-        [minute, 15, 15 * durationMinute],
-        [minute, 30, 30 * durationMinute],
-        [  hour,  1,      durationHour  ],
-        [  hour,  3,  3 * durationHour  ],
-        [  hour,  6,  6 * durationHour  ],
-        [  hour, 12, 12 * durationHour  ],
-        [   day,  1,      durationDay   ],
-        [   day,  2,  2 * durationDay   ],
-        [  week,  1,      durationWeek  ],
-        [ month,  1,      durationMonth ],
-        [ month,  3,  3 * durationMonth ],
-        [  year,  1,      durationYear  ]
-      ];
-
-      function ticks(start, stop, count) {
-        const reverse = stop < start;
-        if (reverse) [start, stop] = [stop, start];
-        const interval = count && typeof count.range === "function" ? count : tickInterval(start, stop, count);
-        const ticks = interval ? interval.range(start, +stop + 1) : []; // inclusive stop
-        return reverse ? ticks.reverse() : ticks;
-      }
-
-      function tickInterval(start, stop, count) {
-        const target = Math.abs(stop - start) / count;
-        const i = bisector(([,, step]) => step).right(tickIntervals, target);
-        if (i === tickIntervals.length) return year.every(tickStep(start / durationYear, stop / durationYear, count));
-        if (i === 0) return millisecond$1.every(Math.max(tickStep(start, stop, count), 1));
-        const [t, step] = tickIntervals[target / tickIntervals[i - 1][2] < tickIntervals[i][2] / target ? i - 1 : i];
-        return t.every(step);
-      }
-
-      return [ticks, tickInterval];
-    }
-
-    const [utcTicks, utcTickInterval] = ticker(utcYear$1, utcMonth$1, utcSunday, utcDay$1, utcHour$1, utcMinute$1);
-    const [timeTicks, timeTickInterval] = ticker(timeYear, month$1, sunday, timeDay, hour$1, minute$1);
-
-    function localDate(d) {
-      if (0 <= d.y && d.y < 100) {
-        var date = new Date(-1, d.m, d.d, d.H, d.M, d.S, d.L);
-        date.setFullYear(d.y);
-        return date;
-      }
-      return new Date(d.y, d.m, d.d, d.H, d.M, d.S, d.L);
-    }
-
-    function utcDate(d) {
-      if (0 <= d.y && d.y < 100) {
-        var date = new Date(Date.UTC(-1, d.m, d.d, d.H, d.M, d.S, d.L));
-        date.setUTCFullYear(d.y);
-        return date;
-      }
-      return new Date(Date.UTC(d.y, d.m, d.d, d.H, d.M, d.S, d.L));
-    }
-
-    function newDate(y, m, d) {
-      return {y: y, m: m, d: d, H: 0, M: 0, S: 0, L: 0};
-    }
-
-    function formatLocale(locale) {
-      var locale_dateTime = locale.dateTime,
-          locale_date = locale.date,
-          locale_time = locale.time,
-          locale_periods = locale.periods,
-          locale_weekdays = locale.days,
-          locale_shortWeekdays = locale.shortDays,
-          locale_months = locale.months,
-          locale_shortMonths = locale.shortMonths;
-
-      var periodRe = formatRe(locale_periods),
-          periodLookup = formatLookup(locale_periods),
-          weekdayRe = formatRe(locale_weekdays),
-          weekdayLookup = formatLookup(locale_weekdays),
-          shortWeekdayRe = formatRe(locale_shortWeekdays),
-          shortWeekdayLookup = formatLookup(locale_shortWeekdays),
-          monthRe = formatRe(locale_months),
-          monthLookup = formatLookup(locale_months),
-          shortMonthRe = formatRe(locale_shortMonths),
-          shortMonthLookup = formatLookup(locale_shortMonths);
-
-      var formats = {
-        "a": formatShortWeekday,
-        "A": formatWeekday,
-        "b": formatShortMonth,
-        "B": formatMonth,
-        "c": null,
-        "d": formatDayOfMonth,
-        "e": formatDayOfMonth,
-        "f": formatMicroseconds,
-        "g": formatYearISO,
-        "G": formatFullYearISO,
-        "H": formatHour24,
-        "I": formatHour12,
-        "j": formatDayOfYear,
-        "L": formatMilliseconds,
-        "m": formatMonthNumber,
-        "M": formatMinutes,
-        "p": formatPeriod,
-        "q": formatQuarter,
-        "Q": formatUnixTimestamp,
-        "s": formatUnixTimestampSeconds,
-        "S": formatSeconds,
-        "u": formatWeekdayNumberMonday,
-        "U": formatWeekNumberSunday,
-        "V": formatWeekNumberISO,
-        "w": formatWeekdayNumberSunday,
-        "W": formatWeekNumberMonday,
-        "x": null,
-        "X": null,
-        "y": formatYear,
-        "Y": formatFullYear,
-        "Z": formatZone,
-        "%": formatLiteralPercent
-      };
-
-      var utcFormats = {
-        "a": formatUTCShortWeekday,
-        "A": formatUTCWeekday,
-        "b": formatUTCShortMonth,
-        "B": formatUTCMonth,
-        "c": null,
-        "d": formatUTCDayOfMonth,
-        "e": formatUTCDayOfMonth,
-        "f": formatUTCMicroseconds,
-        "g": formatUTCYearISO,
-        "G": formatUTCFullYearISO,
-        "H": formatUTCHour24,
-        "I": formatUTCHour12,
-        "j": formatUTCDayOfYear,
-        "L": formatUTCMilliseconds,
-        "m": formatUTCMonthNumber,
-        "M": formatUTCMinutes,
-        "p": formatUTCPeriod,
-        "q": formatUTCQuarter,
-        "Q": formatUnixTimestamp,
-        "s": formatUnixTimestampSeconds,
-        "S": formatUTCSeconds,
-        "u": formatUTCWeekdayNumberMonday,
-        "U": formatUTCWeekNumberSunday,
-        "V": formatUTCWeekNumberISO,
-        "w": formatUTCWeekdayNumberSunday,
-        "W": formatUTCWeekNumberMonday,
-        "x": null,
-        "X": null,
-        "y": formatUTCYear,
-        "Y": formatUTCFullYear,
-        "Z": formatUTCZone,
-        "%": formatLiteralPercent
-      };
-
-      var parses = {
-        "a": parseShortWeekday,
-        "A": parseWeekday,
-        "b": parseShortMonth,
-        "B": parseMonth,
-        "c": parseLocaleDateTime,
-        "d": parseDayOfMonth,
-        "e": parseDayOfMonth,
-        "f": parseMicroseconds,
-        "g": parseYear,
-        "G": parseFullYear,
-        "H": parseHour24,
-        "I": parseHour24,
-        "j": parseDayOfYear,
-        "L": parseMilliseconds,
-        "m": parseMonthNumber,
-        "M": parseMinutes,
-        "p": parsePeriod,
-        "q": parseQuarter,
-        "Q": parseUnixTimestamp,
-        "s": parseUnixTimestampSeconds,
-        "S": parseSeconds,
-        "u": parseWeekdayNumberMonday,
-        "U": parseWeekNumberSunday,
-        "V": parseWeekNumberISO,
-        "w": parseWeekdayNumberSunday,
-        "W": parseWeekNumberMonday,
-        "x": parseLocaleDate,
-        "X": parseLocaleTime,
-        "y": parseYear,
-        "Y": parseFullYear,
-        "Z": parseZone,
-        "%": parseLiteralPercent
-      };
-
-      // These recursive directive definitions must be deferred.
-      formats.x = newFormat(locale_date, formats);
-      formats.X = newFormat(locale_time, formats);
-      formats.c = newFormat(locale_dateTime, formats);
-      utcFormats.x = newFormat(locale_date, utcFormats);
-      utcFormats.X = newFormat(locale_time, utcFormats);
-      utcFormats.c = newFormat(locale_dateTime, utcFormats);
-
-      function newFormat(specifier, formats) {
-        return function(date) {
-          var string = [],
-              i = -1,
-              j = 0,
-              n = specifier.length,
-              c,
-              pad,
-              format;
-
-          if (!(date instanceof Date)) date = new Date(+date);
-
-          while (++i < n) {
-            if (specifier.charCodeAt(i) === 37) {
-              string.push(specifier.slice(j, i));
-              if ((pad = pads[c = specifier.charAt(++i)]) != null) c = specifier.charAt(++i);
-              else pad = c === "e" ? " " : "0";
-              if (format = formats[c]) c = format(date, pad);
-              string.push(c);
-              j = i + 1;
-            }
-          }
-
-          string.push(specifier.slice(j, i));
-          return string.join("");
-        };
-      }
-
-      function newParse(specifier, Z) {
-        return function(string) {
-          var d = newDate(1900, undefined, 1),
-              i = parseSpecifier(d, specifier, string += "", 0),
-              week, day;
-          if (i != string.length) return null;
-
-          // If a UNIX timestamp is specified, return it.
-          if ("Q" in d) return new Date(d.Q);
-          if ("s" in d) return new Date(d.s * 1000 + ("L" in d ? d.L : 0));
-
-          // If this is utcParse, never use the local timezone.
-          if (Z && !("Z" in d)) d.Z = 0;
-
-          // The am-pm flag is 0 for AM, and 1 for PM.
-          if ("p" in d) d.H = d.H % 12 + d.p * 12;
-
-          // If the month was not specified, inherit from the quarter.
-          if (d.m === undefined) d.m = "q" in d ? d.q : 0;
-
-          // Convert day-of-week and week-of-year to day-of-year.
-          if ("V" in d) {
-            if (d.V < 1 || d.V > 53) return null;
-            if (!("w" in d)) d.w = 1;
-            if ("Z" in d) {
-              week = utcDate(newDate(d.y, 0, 1)), day = week.getUTCDay();
-              week = day > 4 || day === 0 ? utcMonday.ceil(week) : utcMonday(week);
-              week = utcDay$1.offset(week, (d.V - 1) * 7);
-              d.y = week.getUTCFullYear();
-              d.m = week.getUTCMonth();
-              d.d = week.getUTCDate() + (d.w + 6) % 7;
-            } else {
-              week = localDate(newDate(d.y, 0, 1)), day = week.getDay();
-              week = day > 4 || day === 0 ? monday.ceil(week) : monday(week);
-              week = timeDay.offset(week, (d.V - 1) * 7);
-              d.y = week.getFullYear();
-              d.m = week.getMonth();
-              d.d = week.getDate() + (d.w + 6) % 7;
-            }
-          } else if ("W" in d || "U" in d) {
-            if (!("w" in d)) d.w = "u" in d ? d.u % 7 : "W" in d ? 1 : 0;
-            day = "Z" in d ? utcDate(newDate(d.y, 0, 1)).getUTCDay() : localDate(newDate(d.y, 0, 1)).getDay();
-            d.m = 0;
-            d.d = "W" in d ? (d.w + 6) % 7 + d.W * 7 - (day + 5) % 7 : d.w + d.U * 7 - (day + 6) % 7;
-          }
-
-          // If a time zone is specified, all fields are interpreted as UTC and then
-          // offset according to the specified time zone.
-          if ("Z" in d) {
-            d.H += d.Z / 100 | 0;
-            d.M += d.Z % 100;
-            return utcDate(d);
-          }
-
-          // Otherwise, all fields are in local time.
-          return localDate(d);
-        };
-      }
-
-      function parseSpecifier(d, specifier, string, j) {
-        var i = 0,
-            n = specifier.length,
-            m = string.length,
-            c,
-            parse;
-
-        while (i < n) {
-          if (j >= m) return -1;
-          c = specifier.charCodeAt(i++);
-          if (c === 37) {
-            c = specifier.charAt(i++);
-            parse = parses[c in pads ? specifier.charAt(i++) : c];
-            if (!parse || ((j = parse(d, string, j)) < 0)) return -1;
-          } else if (c != string.charCodeAt(j++)) {
-            return -1;
-          }
-        }
-
-        return j;
-      }
-
-      function parsePeriod(d, string, i) {
-        var n = periodRe.exec(string.slice(i));
-        return n ? (d.p = periodLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
-      }
-
-      function parseShortWeekday(d, string, i) {
-        var n = shortWeekdayRe.exec(string.slice(i));
-        return n ? (d.w = shortWeekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
-      }
-
-      function parseWeekday(d, string, i) {
-        var n = weekdayRe.exec(string.slice(i));
-        return n ? (d.w = weekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
-      }
-
-      function parseShortMonth(d, string, i) {
-        var n = shortMonthRe.exec(string.slice(i));
-        return n ? (d.m = shortMonthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
-      }
-
-      function parseMonth(d, string, i) {
-        var n = monthRe.exec(string.slice(i));
-        return n ? (d.m = monthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
-      }
-
-      function parseLocaleDateTime(d, string, i) {
-        return parseSpecifier(d, locale_dateTime, string, i);
-      }
-
-      function parseLocaleDate(d, string, i) {
-        return parseSpecifier(d, locale_date, string, i);
-      }
-
-      function parseLocaleTime(d, string, i) {
-        return parseSpecifier(d, locale_time, string, i);
-      }
-
-      function formatShortWeekday(d) {
-        return locale_shortWeekdays[d.getDay()];
-      }
-
-      function formatWeekday(d) {
-        return locale_weekdays[d.getDay()];
-      }
-
-      function formatShortMonth(d) {
-        return locale_shortMonths[d.getMonth()];
-      }
-
-      function formatMonth(d) {
-        return locale_months[d.getMonth()];
-      }
-
-      function formatPeriod(d) {
-        return locale_periods[+(d.getHours() >= 12)];
-      }
-
-      function formatQuarter(d) {
-        return 1 + ~~(d.getMonth() / 3);
-      }
-
-      function formatUTCShortWeekday(d) {
-        return locale_shortWeekdays[d.getUTCDay()];
-      }
-
-      function formatUTCWeekday(d) {
-        return locale_weekdays[d.getUTCDay()];
-      }
-
-      function formatUTCShortMonth(d) {
-        return locale_shortMonths[d.getUTCMonth()];
-      }
-
-      function formatUTCMonth(d) {
-        return locale_months[d.getUTCMonth()];
-      }
-
-      function formatUTCPeriod(d) {
-        return locale_periods[+(d.getUTCHours() >= 12)];
-      }
-
-      function formatUTCQuarter(d) {
-        return 1 + ~~(d.getUTCMonth() / 3);
-      }
-
-      return {
-        format: function(specifier) {
-          var f = newFormat(specifier += "", formats);
-          f.toString = function() { return specifier; };
-          return f;
-        },
-        parse: function(specifier) {
-          var p = newParse(specifier += "", false);
-          p.toString = function() { return specifier; };
-          return p;
-        },
-        utcFormat: function(specifier) {
-          var f = newFormat(specifier += "", utcFormats);
-          f.toString = function() { return specifier; };
-          return f;
-        },
-        utcParse: function(specifier) {
-          var p = newParse(specifier += "", true);
-          p.toString = function() { return specifier; };
-          return p;
-        }
-      };
-    }
-
-    var pads = {"-": "", "_": " ", "0": "0"},
-        numberRe = /^\s*\d+/, // note: ignores next directive
-        percentRe = /^%/,
-        requoteRe = /[\\^$*+?|[\]().{}]/g;
-
-    function pad(value, fill, width) {
-      var sign = value < 0 ? "-" : "",
-          string = (sign ? -value : value) + "",
-          length = string.length;
-      return sign + (length < width ? new Array(width - length + 1).join(fill) + string : string);
-    }
-
-    function requote(s) {
-      return s.replace(requoteRe, "\\$&");
-    }
-
-    function formatRe(names) {
-      return new RegExp("^(?:" + names.map(requote).join("|") + ")", "i");
-    }
-
-    function formatLookup(names) {
-      return new Map(names.map((name, i) => [name.toLowerCase(), i]));
-    }
-
-    function parseWeekdayNumberSunday(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 1));
-      return n ? (d.w = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseWeekdayNumberMonday(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 1));
-      return n ? (d.u = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseWeekNumberSunday(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.U = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseWeekNumberISO(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.V = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseWeekNumberMonday(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.W = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseFullYear(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 4));
-      return n ? (d.y = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseYear(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.y = +n[0] + (+n[0] > 68 ? 1900 : 2000), i + n[0].length) : -1;
-    }
-
-    function parseZone(d, string, i) {
-      var n = /^(Z)|([+-]\d\d)(?::?(\d\d))?/.exec(string.slice(i, i + 6));
-      return n ? (d.Z = n[1] ? 0 : -(n[2] + (n[3] || "00")), i + n[0].length) : -1;
-    }
-
-    function parseQuarter(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 1));
-      return n ? (d.q = n[0] * 3 - 3, i + n[0].length) : -1;
-    }
-
-    function parseMonthNumber(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.m = n[0] - 1, i + n[0].length) : -1;
-    }
-
-    function parseDayOfMonth(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.d = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseDayOfYear(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 3));
-      return n ? (d.m = 0, d.d = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseHour24(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.H = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseMinutes(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.M = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseSeconds(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 2));
-      return n ? (d.S = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseMilliseconds(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 3));
-      return n ? (d.L = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseMicroseconds(d, string, i) {
-      var n = numberRe.exec(string.slice(i, i + 6));
-      return n ? (d.L = Math.floor(n[0] / 1000), i + n[0].length) : -1;
-    }
-
-    function parseLiteralPercent(d, string, i) {
-      var n = percentRe.exec(string.slice(i, i + 1));
-      return n ? i + n[0].length : -1;
-    }
-
-    function parseUnixTimestamp(d, string, i) {
-      var n = numberRe.exec(string.slice(i));
-      return n ? (d.Q = +n[0], i + n[0].length) : -1;
-    }
-
-    function parseUnixTimestampSeconds(d, string, i) {
-      var n = numberRe.exec(string.slice(i));
-      return n ? (d.s = +n[0], i + n[0].length) : -1;
-    }
-
-    function formatDayOfMonth(d, p) {
-      return pad(d.getDate(), p, 2);
-    }
-
-    function formatHour24(d, p) {
-      return pad(d.getHours(), p, 2);
-    }
-
-    function formatHour12(d, p) {
-      return pad(d.getHours() % 12 || 12, p, 2);
-    }
-
-    function formatDayOfYear(d, p) {
-      return pad(1 + timeDay.count(timeYear(d), d), p, 3);
-    }
-
-    function formatMilliseconds(d, p) {
-      return pad(d.getMilliseconds(), p, 3);
-    }
-
-    function formatMicroseconds(d, p) {
-      return formatMilliseconds(d, p) + "000";
-    }
-
-    function formatMonthNumber(d, p) {
-      return pad(d.getMonth() + 1, p, 2);
-    }
-
-    function formatMinutes(d, p) {
-      return pad(d.getMinutes(), p, 2);
-    }
-
-    function formatSeconds(d, p) {
-      return pad(d.getSeconds(), p, 2);
-    }
-
-    function formatWeekdayNumberMonday(d) {
-      var day = d.getDay();
-      return day === 0 ? 7 : day;
-    }
-
-    function formatWeekNumberSunday(d, p) {
-      return pad(sunday.count(timeYear(d) - 1, d), p, 2);
-    }
-
-    function dISO(d) {
-      var day = d.getDay();
-      return (day >= 4 || day === 0) ? thursday(d) : thursday.ceil(d);
-    }
-
-    function formatWeekNumberISO(d, p) {
-      d = dISO(d);
-      return pad(thursday.count(timeYear(d), d) + (timeYear(d).getDay() === 4), p, 2);
-    }
-
-    function formatWeekdayNumberSunday(d) {
-      return d.getDay();
-    }
-
-    function formatWeekNumberMonday(d, p) {
-      return pad(monday.count(timeYear(d) - 1, d), p, 2);
-    }
-
-    function formatYear(d, p) {
-      return pad(d.getFullYear() % 100, p, 2);
-    }
-
-    function formatYearISO(d, p) {
-      d = dISO(d);
-      return pad(d.getFullYear() % 100, p, 2);
-    }
-
-    function formatFullYear(d, p) {
-      return pad(d.getFullYear() % 10000, p, 4);
-    }
-
-    function formatFullYearISO(d, p) {
-      var day = d.getDay();
-      d = (day >= 4 || day === 0) ? thursday(d) : thursday.ceil(d);
-      return pad(d.getFullYear() % 10000, p, 4);
-    }
-
-    function formatZone(d) {
-      var z = d.getTimezoneOffset();
-      return (z > 0 ? "-" : (z *= -1, "+"))
-          + pad(z / 60 | 0, "0", 2)
-          + pad(z % 60, "0", 2);
-    }
-
-    function formatUTCDayOfMonth(d, p) {
-      return pad(d.getUTCDate(), p, 2);
-    }
-
-    function formatUTCHour24(d, p) {
-      return pad(d.getUTCHours(), p, 2);
-    }
-
-    function formatUTCHour12(d, p) {
-      return pad(d.getUTCHours() % 12 || 12, p, 2);
-    }
-
-    function formatUTCDayOfYear(d, p) {
-      return pad(1 + utcDay$1.count(utcYear$1(d), d), p, 3);
-    }
-
-    function formatUTCMilliseconds(d, p) {
-      return pad(d.getUTCMilliseconds(), p, 3);
-    }
-
-    function formatUTCMicroseconds(d, p) {
-      return formatUTCMilliseconds(d, p) + "000";
-    }
-
-    function formatUTCMonthNumber(d, p) {
-      return pad(d.getUTCMonth() + 1, p, 2);
-    }
-
-    function formatUTCMinutes(d, p) {
-      return pad(d.getUTCMinutes(), p, 2);
-    }
-
-    function formatUTCSeconds(d, p) {
-      return pad(d.getUTCSeconds(), p, 2);
-    }
-
-    function formatUTCWeekdayNumberMonday(d) {
-      var dow = d.getUTCDay();
-      return dow === 0 ? 7 : dow;
-    }
-
-    function formatUTCWeekNumberSunday(d, p) {
-      return pad(utcSunday.count(utcYear$1(d) - 1, d), p, 2);
-    }
-
-    function UTCdISO(d) {
-      var day = d.getUTCDay();
-      return (day >= 4 || day === 0) ? utcThursday(d) : utcThursday.ceil(d);
-    }
-
-    function formatUTCWeekNumberISO(d, p) {
-      d = UTCdISO(d);
-      return pad(utcThursday.count(utcYear$1(d), d) + (utcYear$1(d).getUTCDay() === 4), p, 2);
-    }
-
-    function formatUTCWeekdayNumberSunday(d) {
-      return d.getUTCDay();
-    }
-
-    function formatUTCWeekNumberMonday(d, p) {
-      return pad(utcMonday.count(utcYear$1(d) - 1, d), p, 2);
-    }
-
-    function formatUTCYear(d, p) {
-      return pad(d.getUTCFullYear() % 100, p, 2);
-    }
-
-    function formatUTCYearISO(d, p) {
-      d = UTCdISO(d);
-      return pad(d.getUTCFullYear() % 100, p, 2);
-    }
-
-    function formatUTCFullYear(d, p) {
-      return pad(d.getUTCFullYear() % 10000, p, 4);
-    }
-
-    function formatUTCFullYearISO(d, p) {
-      var day = d.getUTCDay();
-      d = (day >= 4 || day === 0) ? utcThursday(d) : utcThursday.ceil(d);
-      return pad(d.getUTCFullYear() % 10000, p, 4);
-    }
-
-    function formatUTCZone() {
-      return "+0000";
-    }
-
-    function formatLiteralPercent() {
-      return "%";
-    }
-
-    function formatUnixTimestamp(d) {
-      return +d;
-    }
-
-    function formatUnixTimestampSeconds(d) {
-      return Math.floor(+d / 1000);
-    }
-
-    var locale;
-    var timeFormat;
-    var timeParse;
-    var utcFormat;
-    var utcParse;
-
-    defaultLocale({
-      dateTime: "%x, %X",
-      date: "%-m/%-d/%Y",
-      time: "%-I:%M:%S %p",
-      periods: ["AM", "PM"],
-      days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-      shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    });
-
-    function defaultLocale(definition) {
-      locale = formatLocale(definition);
-      timeFormat = locale.format;
-      timeParse = locale.parse;
-      utcFormat = locale.utcFormat;
-      utcParse = locale.utcParse;
-      return locale;
-    }
-
-    var isoSpecifier = "%Y-%m-%dT%H:%M:%S.%LZ";
-
-    function formatIsoNative(date) {
-      return date.toISOString();
-    }
-
-    var formatIso = Date.prototype.toISOString
-        ? formatIsoNative
-        : utcFormat(isoSpecifier);
-
-    var formatIso$1 = formatIso;
-
-    function parseIsoNative(string) {
-      var date = new Date(string);
-      return isNaN(date) ? null : date;
-    }
-
-    var parseIso = +new Date("2000-01-01T00:00:00.000Z")
-        ? parseIsoNative
-        : utcParse(isoSpecifier);
-
-    var parseIso$1 = parseIso;
-
     var constant = x => () => x;
 
     function ZoomEvent(type, {
@@ -91147,7 +91166,7 @@ var app = (function () {
         geoDistance: distance,
         geoGraticule: graticule,
         geoGraticule10: graticule10,
-        geoInterpolate: interpolate,
+        geoInterpolate: interpolate$1,
         geoLength: length$1,
         geoPath: index$2,
         geoAlbers: albers,
@@ -91200,17 +91219,17 @@ var app = (function () {
         treemapSliceDice: sliceDice,
         treemapSquarify: squarify,
         treemapResquarify: resquarify,
-        interpolate: value,
+        interpolate: interpolate,
         interpolateArray: array$1,
         interpolateBasis: basis$2,
         interpolateBasisClosed: basisClosed$1,
         interpolateDate: date$1,
         interpolateDiscrete: discrete,
         interpolateHue: hue,
-        interpolateNumber: number$2,
+        interpolateNumber: interpolateNumber,
         interpolateNumberArray: numberArray,
         interpolateObject: object,
-        interpolateRound: round,
+        interpolateRound: interpolateRound,
         interpolateString: string,
         interpolateTransformCss: interpolateTransformCss,
         interpolateTransformSvg: interpolateTransformSvg,
@@ -91437,13 +91456,13 @@ var app = (function () {
         timeMilliseconds: milliseconds,
         utcMillisecond: millisecond$1,
         utcMilliseconds: milliseconds,
-        timeSecond: second$1,
+        timeSecond: utcSecond,
         timeSeconds: seconds,
-        utcSecond: second$1,
+        utcSecond: utcSecond,
         utcSeconds: seconds,
-        timeMinute: minute$1,
+        timeMinute: timeMinute,
         timeMinutes: minutes,
-        timeHour: hour$1,
+        timeHour: timeHour,
         timeHours: hours,
         timeDay: timeDay,
         timeDays: days,
@@ -91463,7 +91482,7 @@ var app = (function () {
         timeFridays: fridays,
         timeSaturday: saturday,
         timeSaturdays: saturdays,
-        timeMonth: month$1,
+        timeMonth: timeMonth,
         timeMonths: months,
         timeYear: timeYear,
         timeYears: years,
@@ -91531,7 +91550,7 @@ var app = (function () {
     		c: function create() {
     			div = element$2("div");
     			attr_dev(div, "id", "chart");
-    			add_location(div, file$2, 170, 0, 5246);
+    			add_location(div, file$2, 186, 0, 5703);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -91572,9 +91591,10 @@ var app = (function () {
 
     	const width = totalSize.w - margin.left - margin.right;
     	const height = totalSize.h - margin.top - margin.bottom;
-    	let selectedStates = ["WA", "OR"];
-    	let selectedYear = "2010";
-    	let selectedResource = "Total";
+    	let { selectedStates } = $$props;
+    	let { selectedYear } = $$props;
+    	let { selectedResource } = $$props;
+    	console.log(selectedYear);
     	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     	let formatData = []; //Contains each state's data as an element
     	let gMin = 9999999999; //The min and max for power generation
@@ -91626,6 +91646,11 @@ var app = (function () {
 
     		svg.append("g").call(axisLeft(yAxis));
 
+    		//Naming of the chart
+    		svg.append("text").attr("x", totalSize.w - 250).attr("y", 5).text("Power Generation by " + selectedYear + " from ").style("font-size", "16px").attr("alignment-baseline", "middle");
+
+    		svg.append("text").attr("x", totalSize.w - 250).attr("y", 20).text("From Resource " + selectedResource).style("font-size", "16px").attr("alignment-baseline", "middle");
+
     		//Create line and tooltip for each state data
     		let legendH = 50;
 
@@ -91657,11 +91682,17 @@ var app = (function () {
     		}
     	});
 
-    	const writable_props = [];
+    	const writable_props = ['selectedStates', 'selectedYear', 'selectedResource'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<GenerationLineChart> was created with unknown prop '${key}'`);
     	});
+
+    	$$self.$$set = $$props => {
+    		if ('selectedStates' in $$props) $$invalidate(0, selectedStates = $$props.selectedStates);
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
+    	};
 
     	$$self.$capture_state = () => ({
     		onMount,
@@ -91680,9 +91711,9 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('selectedStates' in $$props) selectedStates = $$props.selectedStates;
-    		if ('selectedYear' in $$props) selectedYear = $$props.selectedYear;
-    		if ('selectedResource' in $$props) selectedResource = $$props.selectedResource;
+    		if ('selectedStates' in $$props) $$invalidate(0, selectedStates = $$props.selectedStates);
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
     		if ('formatData' in $$props) formatData = $$props.formatData;
     		if ('gMin' in $$props) gMin = $$props.gMin;
     		if ('gMax' in $$props) gMax = $$props.gMax;
@@ -91692,13 +91723,18 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [];
+    	return [selectedStates, selectedYear, selectedResource];
     }
 
     class GenerationLineChart extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$2(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+    		init$2(this, options, instance$2, create_fragment$2, safe_not_equal, {
+    			selectedStates: 0,
+    			selectedYear: 1,
+    			selectedResource: 2
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -91706,6 +91742,45 @@ var app = (function () {
     			options,
     			id: create_fragment$2.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*selectedStates*/ ctx[0] === undefined && !('selectedStates' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedStates'");
+    		}
+
+    		if (/*selectedYear*/ ctx[1] === undefined && !('selectedYear' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedYear'");
+    		}
+
+    		if (/*selectedResource*/ ctx[2] === undefined && !('selectedResource' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedResource'");
+    		}
+    	}
+
+    	get selectedStates() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedStates(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedYear() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedYear(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedResource() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedResource(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -91747,7 +91822,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (125:4) {#if instances !== undefined}
+    // (127:4) {#if instances !== undefined}
     function create_if_block(ctx) {
     	let g0;
     	let text_1;
@@ -91805,23 +91880,23 @@ var app = (function () {
     			line0 = svg_element("line");
     			line1 = svg_element("line");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 126, 5, 3719);
+    			add_location(text_1, file$1, 128, 5, 3732);
     			attr_dev(g0, "transform", "translate(0, 10)");
-    			add_location(g0, file$1, 125, 4, 3680);
+    			add_location(g0, file$1, 127, 4, 3693);
     			attr_dev(line0, "class", "tick svelte-8xmk8");
     			attr_dev(line0, "x1", "220");
     			attr_dev(line0, "y1", "45");
     			attr_dev(line0, "x2", 650);
     			attr_dev(line0, "y2", "45");
-    			add_location(line0, file$1, 176, 5, 5301);
+    			add_location(line0, file$1, 178, 5, 5314);
     			attr_dev(line1, "class", "tick svelte-8xmk8");
     			attr_dev(line1, "x1", "220");
     			attr_dev(line1, "y1", 40);
     			attr_dev(line1, "x2", "220");
     			attr_dev(line1, "y2", "450");
-    			add_location(line1, file$1, 180, 5, 5379);
+    			add_location(line1, file$1, 182, 5, 5392);
     			attr_dev(g1, "transform", "translate(0, 70)");
-    			add_location(g1, file$1, 139, 4, 4135);
+    			add_location(g1, file$1, 141, 4, 4148);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g0, anchor);
@@ -91933,14 +92008,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(125:4) {#if instances !== undefined}",
+    		source: "(127:4) {#if instances !== undefined}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (128:5) {#each all_sources as source, index}
+    // (130:5) {#each all_sources as source, index}
     function create_each_block_4(ctx) {
     	let rect;
     	let rect_class_value;
@@ -91951,7 +92026,7 @@ var app = (function () {
     	let dispose;
 
     	function click_handler() {
-    		return /*click_handler*/ ctx[8](/*source*/ ctx[25]);
+    		return /*click_handler*/ ctx[10](/*source*/ ctx[25]);
     	}
 
     	const block = {
@@ -91968,11 +92043,11 @@ var app = (function () {
     			? "selected_check"
     			: "not_checked") + " svelte-8xmk8"));
 
-    			add_location(rect, file$1, 128, 6, 3806);
+    			add_location(rect, file$1, 130, 6, 3819);
     			attr_dev(text_1, "x", "30");
     			attr_dev(text_1, "y", 10 * /*index*/ ctx[22] + 10);
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 135, 6, 4044);
+    			add_location(text_1, file$1, 137, 6, 4057);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, rect, anchor);
@@ -92005,14 +92080,14 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(128:5) {#each all_sources as source, index}",
+    		source: "(130:5) {#each all_sources as source, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (144:7) {#if selected_sources.includes(energy["Generation Type"])}
+    // (146:7) {#if selected_sources.includes(energy["Generation Type"])}
     function create_if_block_1(ctx) {
     	let g;
     	let rect;
@@ -92045,13 +92120,13 @@ var app = (function () {
     			attr_dev(rect, "width", rect_width_value = /*xScaleNew*/ ctx[1](/*energy*/ ctx[20].Sum));
     			attr_dev(rect, "height", "8");
     			set_style(rect, "fill", colorEnergy(/*energy*/ ctx[20]));
-    			add_location(rect, file$1, 145, 9, 4470);
+    			add_location(rect, file$1, 147, 9, 4483);
     			attr_dev(text_1, "x", "-30");
     			attr_dev(text_1, "y", "9");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 149, 9, 4630);
+    			add_location(text_1, file$1, 151, 9, 4643);
     			attr_dev(g, "transform", "translate(100, " + (/*index*/ ctx[22] * 10 + 50 + /*i*/ ctx[19] * 150) + ")");
-    			add_location(g, file$1, 144, 8, 4398);
+    			add_location(g, file$1, 146, 8, 4411);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -92102,14 +92177,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(144:7) {#if selected_sources.includes(energy[\\\"Generation Type\\\"])}",
+    		source: "(146:7) {#if selected_sources.includes(energy[\\\"Generation Type\\\"])}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (151:9) {#each xScaleTicks as tick}
+    // (153:9) {#each xScaleTicks as tick}
     function create_each_block_3(ctx) {
     	let line;
     	let line_x__value;
@@ -92123,7 +92198,7 @@ var app = (function () {
     			attr_dev(line, "y1", "0");
     			attr_dev(line, "x2", line_x__value_1 = 120 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[14]));
     			attr_dev(line, "y2", "5");
-    			add_location(line, file$1, 151, 10, 4744);
+    			add_location(line, file$1, 153, 10, 4757);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -92146,14 +92221,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(151:9) {#each xScaleTicks as tick}",
+    		source: "(153:9) {#each xScaleTicks as tick}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (143:6) {#each state.Totals as energy, index}
+    // (145:6) {#each state.Totals as energy, index}
     function create_each_block_2(ctx) {
     	let show_if = /*selected_sources*/ ctx[3].includes(/*energy*/ ctx[20]["Generation Type"]);
     	let if_block_anchor;
@@ -92194,14 +92269,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(143:6) {#each state.Totals as energy, index}",
+    		source: "(145:6) {#each state.Totals as energy, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (141:5) {#each generation_values as state, i}
+    // (143:5) {#each generation_values as state, i}
     function create_each_block_1(ctx) {
     	let text_1;
     	let t_value = /*state*/ ctx[17].State + "";
@@ -92228,7 +92303,7 @@ var app = (function () {
     			attr_dev(text_1, "x", "19");
     			attr_dev(text_1, "y", 60 + /*i*/ ctx[19] * 150);
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 141, 5, 4218);
+    			add_location(text_1, file$1, 143, 5, 4231);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, text_1, anchor);
@@ -92276,14 +92351,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(141:5) {#each generation_values as state, i}",
+    		source: "(143:5) {#each generation_values as state, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (166:5) {#each xScaleTicks as tick}
+    // (168:5) {#each xScaleTicks as tick}
     function create_each_block(ctx) {
     	let text_1;
     	let t_value = /*tick*/ ctx[14] + "";
@@ -92301,13 +92376,13 @@ var app = (function () {
     			attr_dev(text_1, "transform", text_1_transform_value = "translate(" + (220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[14])) + ", 40) rotate(-45)");
     			set_style(text_1, "font-size", "8");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 166, 6, 5023);
+    			add_location(text_1, file$1, 168, 6, 5036);
     			attr_dev(line, "class", "tick svelte-8xmk8");
     			attr_dev(line, "x1", line_x__value = 220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[14]));
     			attr_dev(line, "y1", "40");
     			attr_dev(line, "x2", line_x__value_1 = 220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[14]));
     			attr_dev(line, "y2", "45");
-    			add_location(line, file$1, 169, 6, 5150);
+    			add_location(line, file$1, 171, 6, 5163);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, text_1, anchor);
@@ -92339,7 +92414,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(166:5) {#each xScaleTicks as tick}",
+    		source: "(168:5) {#each xScaleTicks as tick}",
     		ctx
     	});
 
@@ -92363,13 +92438,13 @@ var app = (function () {
     			attr_dev(svg, "id", "visualization");
     			set_style(svg, "width", "1000px");
     			attr_dev(svg, "class", "svelte-8xmk8");
-    			add_location(svg, file$1, 123, 3, 3592);
+    			add_location(svg, file$1, 125, 3, 3605);
     			attr_dev(div0, "id", "sidebar");
     			attr_dev(div0, "class", "svelte-8xmk8");
-    			add_location(div0, file$1, 122, 2, 3568);
+    			add_location(div0, file$1, 124, 2, 3581);
     			attr_dev(div1, "id", "alex-view");
-    			add_location(div1, file$1, 119, 1, 3540);
-    			add_location(main, file$1, 118, 0, 3531);
+    			add_location(div1, file$1, 121, 1, 3553);
+    			add_location(main, file$1, 120, 0, 3544);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -92477,8 +92552,8 @@ var app = (function () {
     	let xScaleNew;
     	let xScaleTicks = [];
     	let colorScale;
-    	let year_selected = "2020"; // 
-    	let states_selected = ['Oregon', 'California', 'Washington']; // 
+    	let { selectedYear } = $$props;
+    	let { selectedStates } = $$props;
 
     	let selected_sources = [
     		"Coal",
@@ -92514,14 +92589,16 @@ var app = (function () {
     		$$invalidate(0, instances = await fetched.json());
 
     		// filter by year and states
-    		states_selected.forEach(state => {
+    		selectedStates.forEach(state => {
     			data.push({
     				"State": state,
     				"records": instances.filter(record => {
-    					return record.YEAR == year_selected && record.STATE == state;
+    					return record.YEAR == selectedYear && record.STATE_ABBREV == state;
     				})
     			});
     		});
+
+    		console.log(data);
 
     		// data transformation
     		data.forEach(state_data => {
@@ -92537,8 +92614,8 @@ var app = (function () {
 
     			unique.forEach(genType => {
     				if (genType != "Total") {
-    					let temp_data = instances.filter(data => {
-    						return data["ENERGY SOURCE"] == genType && data.STATE == state_data.State;
+    					let temp_data = state_data.records.filter(element => {
+    						return element["ENERGY SOURCE"] == genType && element.STATE_ABBREV == state_data.State;
     					});
 
     					let total = 0;
@@ -92561,9 +92638,10 @@ var app = (function () {
     			});
     		});
 
-    		//console.log(generation_values)
+    		console.log(generation_values);
+
     		// console.log(max)
-    		$$invalidate(1, xScaleNew = linear().domain([0, max]).range([0, 400]));
+    		$$invalidate(1, xScaleNew = linear$3().domain([0, max]).range([0, 400]));
 
     		$$invalidate(2, xScaleTicks = xScaleNew.ticks(26));
     		console.log(generation_values);
@@ -92581,7 +92659,7 @@ var app = (function () {
     		}
     	}
 
-    	const writable_props = [];
+    	const writable_props = ['selectedYear', 'selectedStates'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<BarChart> was created with unknown prop '${key}'`);
@@ -92591,18 +92669,23 @@ var app = (function () {
     		update_selected(source);
     	};
 
+    	$$self.$$set = $$props => {
+    		if ('selectedYear' in $$props) $$invalidate(8, selectedYear = $$props.selectedYear);
+    		if ('selectedStates' in $$props) $$invalidate(9, selectedStates = $$props.selectedStates);
+    	};
+
     	$$self.$capture_state = () => ({
     		onMount,
-    		scaleLinear: linear,
-    		scaleOrdinal: ordinal,
+    		scaleLinear: linear$3,
+    		scaleOrdinal: ordinal$1,
     		myName,
     		instances,
     		data,
     		xScaleNew,
     		xScaleTicks,
     		colorScale,
-    		year_selected,
-    		states_selected,
+    		selectedYear,
+    		selectedStates,
     		selected_sources,
     		all_sources,
     		generation_values,
@@ -92619,8 +92702,8 @@ var app = (function () {
     		if ('xScaleNew' in $$props) $$invalidate(1, xScaleNew = $$props.xScaleNew);
     		if ('xScaleTicks' in $$props) $$invalidate(2, xScaleTicks = $$props.xScaleTicks);
     		if ('colorScale' in $$props) colorScale = $$props.colorScale;
-    		if ('year_selected' in $$props) year_selected = $$props.year_selected;
-    		if ('states_selected' in $$props) states_selected = $$props.states_selected;
+    		if ('selectedYear' in $$props) $$invalidate(8, selectedYear = $$props.selectedYear);
+    		if ('selectedStates' in $$props) $$invalidate(9, selectedStates = $$props.selectedStates);
     		if ('selected_sources' in $$props) $$invalidate(3, selected_sources = $$props.selected_sources);
     		if ('all_sources' in $$props) $$invalidate(4, all_sources = $$props.all_sources);
     		if ('generation_values' in $$props) $$invalidate(5, generation_values = $$props.generation_values);
@@ -92640,6 +92723,8 @@ var app = (function () {
     		generation_values,
     		update_selected,
     		myName,
+    		selectedYear,
+    		selectedStates,
     		click_handler
     	];
     }
@@ -92647,7 +92732,12 @@ var app = (function () {
     class BarChart extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$2(this, options, instance$1, create_fragment$1, safe_not_equal, { myName: 7 });
+
+    		init$2(this, options, instance$1, create_fragment$1, safe_not_equal, {
+    			myName: 7,
+    			selectedYear: 8,
+    			selectedStates: 9
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -92655,6 +92745,17 @@ var app = (function () {
     			options,
     			id: create_fragment$1.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*selectedYear*/ ctx[8] === undefined && !('selectedYear' in props)) {
+    			console_1.warn("<BarChart> was created without expected prop 'selectedYear'");
+    		}
+
+    		if (/*selectedStates*/ ctx[9] === undefined && !('selectedStates' in props)) {
+    			console_1.warn("<BarChart> was created without expected prop 'selectedStates'");
+    		}
     	}
 
     	get myName() {
@@ -92662,6 +92763,22 @@ var app = (function () {
     	}
 
     	set myName(value) {
+    		throw new Error("<BarChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedYear() {
+    		throw new Error("<BarChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedYear(value) {
+    		throw new Error("<BarChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedStates() {
+    		throw new Error("<BarChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedStates(value) {
     		throw new Error("<BarChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -92681,6 +92798,7 @@ var app = (function () {
     	let svg0;
     	let foreignObject0;
     	let generationmap;
+    	let updating_selectedYear;
     	let t4;
     	let div7;
     	let div4;
@@ -92689,6 +92807,8 @@ var app = (function () {
     	let svg1;
     	let foreignObject1;
     	let barchart;
+    	let updating_selectedYear_1;
+    	let updating_selectedStates;
     	let t7;
     	let div6;
     	let div5;
@@ -92696,15 +92816,84 @@ var app = (function () {
     	let svg2;
     	let foreignObject2;
     	let generationlinechart;
+    	let updating_selectedYear_2;
+    	let updating_selectedStates_1;
+    	let updating_selectedResource;
     	let current;
 
+    	function generationmap_selectedYear_binding(value) {
+    		/*generationmap_selectedYear_binding*/ ctx[3](value);
+    	}
+
+    	let generationmap_props = { height: "700", width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		generationmap_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
     	generationmap = new GenerationMap({
-    			props: { height: "700", width: "1000" },
+    			props: generationmap_props,
     			$$inline: true
     		});
 
-    	barchart = new BarChart({ props: { width: "1000" }, $$inline: true });
-    	generationlinechart = new GenerationLineChart({ props: { width: "1000" }, $$inline: true });
+    	binding_callbacks.push(() => bind$2(generationmap, 'selectedYear', generationmap_selectedYear_binding));
+
+    	function barchart_selectedYear_binding(value) {
+    		/*barchart_selectedYear_binding*/ ctx[4](value);
+    	}
+
+    	function barchart_selectedStates_binding(value) {
+    		/*barchart_selectedStates_binding*/ ctx[5](value);
+    	}
+
+    	let barchart_props = { width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		barchart_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
+    	if (/*selectedStates*/ ctx[1] !== void 0) {
+    		barchart_props.selectedStates = /*selectedStates*/ ctx[1];
+    	}
+
+    	barchart = new BarChart({ props: barchart_props, $$inline: true });
+    	binding_callbacks.push(() => bind$2(barchart, 'selectedYear', barchart_selectedYear_binding));
+    	binding_callbacks.push(() => bind$2(barchart, 'selectedStates', barchart_selectedStates_binding));
+
+    	function generationlinechart_selectedYear_binding(value) {
+    		/*generationlinechart_selectedYear_binding*/ ctx[6](value);
+    	}
+
+    	function generationlinechart_selectedStates_binding(value) {
+    		/*generationlinechart_selectedStates_binding*/ ctx[7](value);
+    	}
+
+    	function generationlinechart_selectedResource_binding(value) {
+    		/*generationlinechart_selectedResource_binding*/ ctx[8](value);
+    	}
+
+    	let generationlinechart_props = { width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		generationlinechart_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
+    	if (/*selectedStates*/ ctx[1] !== void 0) {
+    		generationlinechart_props.selectedStates = /*selectedStates*/ ctx[1];
+    	}
+
+    	if (/*selectedResource*/ ctx[2] !== void 0) {
+    		generationlinechart_props.selectedResource = /*selectedResource*/ ctx[2];
+    	}
+
+    	generationlinechart = new GenerationLineChart({
+    			props: generationlinechart_props,
+    			$$inline: true
+    		});
+
+    	binding_callbacks.push(() => bind$2(generationlinechart, 'selectedYear', generationlinechart_selectedYear_binding));
+    	binding_callbacks.push(() => bind$2(generationlinechart, 'selectedStates', generationlinechart_selectedStates_binding));
+    	binding_callbacks.push(() => bind$2(generationlinechart, 'selectedResource', generationlinechart_selectedResource_binding));
 
     	const block = {
     		c: function create() {
@@ -92740,63 +92929,63 @@ var app = (function () {
     			create_component(generationlinechart.$$.fragment);
     			attr_dev(h1, "x", "50");
     			attr_dev(h1, "class", "svelte-1vez0ch");
-    			add_location(h1, file, 7, 1, 229);
+    			add_location(h1, file, 11, 1, 335);
     			attr_dev(div0, "class", "view-title svelte-1vez0ch");
-    			add_location(div0, file, 13, 4, 412);
+    			add_location(div0, file, 17, 4, 518);
     			attr_dev(foreignObject0, "height", "700");
     			attr_dev(foreignObject0, "width", "1000");
     			attr_dev(foreignObject0, "class", "svelte-1vez0ch");
-    			add_location(foreignObject0, file, 15, 4, 489);
+    			add_location(foreignObject0, file, 19, 4, 595);
     			attr_dev(svg0, "height", "700");
     			attr_dev(svg0, "width", "1000");
     			attr_dev(svg0, "class", "svelte-1vez0ch");
-    			add_location(svg0, file, 14, 4, 456);
+    			add_location(svg0, file, 18, 4, 562);
     			attr_dev(div1, "id", "projection-view");
     			attr_dev(div1, "height", "700");
     			attr_dev(div1, "class", "view-panel svelte-1vez0ch");
-    			add_location(div1, file, 12, 3, 350);
+    			add_location(div1, file, 16, 3, 456);
     			attr_dev(div2, "id", "map-view");
     			attr_dev(div2, "height", "700");
     			attr_dev(div2, "class", "svelte-1vez0ch");
-    			add_location(div2, file, 10, 2, 313);
+    			add_location(div2, file, 14, 2, 419);
     			attr_dev(div3, "class", "view-title svelte-1vez0ch");
     			attr_dev(div3, "y", "40");
-    			add_location(div3, file, 24, 4, 723);
+    			add_location(div3, file, 28, 4, 862);
     			attr_dev(foreignObject1, "height", "700");
     			attr_dev(foreignObject1, "width", "1000");
     			attr_dev(foreignObject1, "class", "svelte-1vez0ch");
-    			add_location(foreignObject1, file, 27, 5, 825);
+    			add_location(foreignObject1, file, 31, 5, 964);
     			attr_dev(svg1, "width", "1000");
     			attr_dev(svg1, "height", "500");
     			attr_dev(svg1, "class", "svelte-1vez0ch");
-    			add_location(svg1, file, 26, 4, 789);
+    			add_location(svg1, file, 30, 4, 928);
     			attr_dev(div4, "id", "generation-state-view");
     			attr_dev(div4, "class", "view-panel svelte-1vez0ch");
-    			add_location(div4, file, 23, 3, 666);
+    			add_location(div4, file, 27, 3, 805);
     			attr_dev(div5, "class", "view-title svelte-1vez0ch");
-    			add_location(div5, file, 34, 4, 1012);
+    			add_location(div5, file, 38, 4, 1221);
     			attr_dev(foreignObject2, "height", "700");
     			attr_dev(foreignObject2, "width", "1000");
     			attr_dev(foreignObject2, "class", "svelte-1vez0ch");
-    			add_location(foreignObject2, file, 36, 5, 1117);
+    			add_location(foreignObject2, file, 40, 5, 1326);
     			attr_dev(svg2, "width", "1000");
     			attr_dev(svg2, "height", "500");
     			attr_dev(svg2, "class", "svelte-1vez0ch");
-    			add_location(svg2, file, 35, 4, 1081);
+    			add_location(svg2, file, 39, 4, 1290);
     			attr_dev(div6, "id", "generation-state-resource-view");
     			attr_dev(div6, "class", "view-panel svelte-1vez0ch");
     			attr_dev(div6, "height", "400");
-    			add_location(div6, file, 32, 3, 931);
+    			add_location(div6, file, 36, 3, 1140);
     			attr_dev(div7, "id", "sub-section");
     			attr_dev(div7, "x", "80");
     			attr_dev(div7, "y", "80");
     			attr_dev(div7, "class", "svelte-1vez0ch");
-    			add_location(div7, file, 21, 2, 623);
+    			add_location(div7, file, 25, 2, 762);
     			attr_dev(div8, "id", "container");
     			attr_dev(div8, "class", "svelte-1vez0ch");
-    			add_location(div8, file, 8, 1, 287);
+    			add_location(div8, file, 12, 1, 393);
     			attr_dev(main, "class", "svelte-1vez0ch");
-    			add_location(main, file, 6, 0, 220);
+    			add_location(main, file, 10, 0, 326);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -92830,7 +93019,53 @@ var app = (function () {
     			mount_component(generationlinechart, foreignObject2, null);
     			current = true;
     		},
-    		p: noop$9,
+    		p: function update(ctx, [dirty]) {
+    			const generationmap_changes = {};
+
+    			if (!updating_selectedYear && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear = true;
+    				generationmap_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear = false);
+    			}
+
+    			generationmap.$set(generationmap_changes);
+    			const barchart_changes = {};
+
+    			if (!updating_selectedYear_1 && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear_1 = true;
+    				barchart_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear_1 = false);
+    			}
+
+    			if (!updating_selectedStates && dirty & /*selectedStates*/ 2) {
+    				updating_selectedStates = true;
+    				barchart_changes.selectedStates = /*selectedStates*/ ctx[1];
+    				add_flush_callback(() => updating_selectedStates = false);
+    			}
+
+    			barchart.$set(barchart_changes);
+    			const generationlinechart_changes = {};
+
+    			if (!updating_selectedYear_2 && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear_2 = true;
+    				generationlinechart_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear_2 = false);
+    			}
+
+    			if (!updating_selectedStates_1 && dirty & /*selectedStates*/ 2) {
+    				updating_selectedStates_1 = true;
+    				generationlinechart_changes.selectedStates = /*selectedStates*/ ctx[1];
+    				add_flush_callback(() => updating_selectedStates_1 = false);
+    			}
+
+    			if (!updating_selectedResource && dirty & /*selectedResource*/ 4) {
+    				updating_selectedResource = true;
+    				generationlinechart_changes.selectedResource = /*selectedResource*/ ctx[2];
+    				add_flush_callback(() => updating_selectedResource = false);
+    			}
+
+    			generationlinechart.$set(generationlinechart_changes);
+    		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(generationmap.$$.fragment, local);
@@ -92866,19 +93101,75 @@ var app = (function () {
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
+    	let selectedYear = 2010;
+    	let selectedStates = ["OR", "WA"];
+    	let selectedResource = "Natural Gas";
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
+    	function generationmap_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function barchart_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function barchart_selectedStates_binding(value) {
+    		selectedStates = value;
+    		$$invalidate(1, selectedStates);
+    	}
+
+    	function generationlinechart_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function generationlinechart_selectedStates_binding(value) {
+    		selectedStates = value;
+    		$$invalidate(1, selectedStates);
+    	}
+
+    	function generationlinechart_selectedResource_binding(value) {
+    		selectedResource = value;
+    		$$invalidate(2, selectedResource);
+    	}
+
     	$$self.$capture_state = () => ({
     		GenerationMap,
     		GenerationLineChart,
-    		BarChart
+    		BarChart,
+    		selectedYear,
+    		selectedStates,
+    		selectedResource
     	});
 
-    	return [];
+    	$$self.$inject_state = $$props => {
+    		if ('selectedYear' in $$props) $$invalidate(0, selectedYear = $$props.selectedYear);
+    		if ('selectedStates' in $$props) $$invalidate(1, selectedStates = $$props.selectedStates);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [
+    		selectedYear,
+    		selectedStates,
+    		selectedResource,
+    		generationmap_selectedYear_binding,
+    		barchart_selectedYear_binding,
+    		barchart_selectedStates_binding,
+    		generationlinechart_selectedYear_binding,
+    		generationlinechart_selectedStates_binding,
+    		generationlinechart_selectedResource_binding
+    	];
     }
 
     class App extends SvelteComponentDev {

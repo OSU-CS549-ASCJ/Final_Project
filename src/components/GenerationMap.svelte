@@ -5,7 +5,7 @@
 	let data;
 	let view;
 
-    let selectedYear = 2010;
+    export let selectedYear;
     let selectedMapEnergySource = "Total"
     let formattedData;
 
