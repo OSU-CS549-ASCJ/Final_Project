@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from "svelte";
 	import { scaleLinear, scaleOrdinal } from "d3-scale";
+    import { SelectedStates } from "../store.js"
+    import { SelectedYear } from "../store.js"
 	export const myName = "Alexander Barajas-Ritchie";	
 
 
@@ -9,8 +11,9 @@
 	let xScaleNew;
 	let xScaleTicks = [];
 	let colorScale;
-	let year_selected = "2020" // 
-	let states_selected = ['Oregon','California', 'Washington'] // 
+	let year_selected = $SelectedYear // 
+    console.log($SelectedYear)
+	let states_selected = $SelectedStates // 
 	let selected_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
 								"Solar Thermal and Photovoltaic", "Other Biomass", "Wind", "Wood and Wood Derived Fuels"]
 	let all_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 

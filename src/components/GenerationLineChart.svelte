@@ -1,14 +1,16 @@
 <script>
 	import { onMount } from "svelte";
 	import * as d3 from "d3";
+	import { SelectedStatesAbbrv } from "../store.js"
+    import { SelectedYear } from "../store.js"
 
 	const totalSize = {w: 800, h: 400};
 	const margin = {top: 10, right: 200, bottom: 30, left: 60};
 	const width = totalSize.w - margin.left - margin.right;
 	const height = totalSize.h - margin.top - margin.bottom;
 	
-	let selectedStates = ["WA", "OR"];
-	let selectedYear = "2010";
+	let selectedStates = $SelectedStatesAbbrv;
+	let selectedYear = $SelectedYear;
 	let selectedResource = "Total";
 
 	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
