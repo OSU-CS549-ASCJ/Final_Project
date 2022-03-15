@@ -23,7 +23,8 @@
 		data = rawData.filter(record => record.YEAR == $SelectedYear && 
 												record["ENERGY SOURCE"] == selectedMapEnergySource &&
                                                 record["TYPE OF PRODUCER"] == "Total Electric Power Industry" &&
-                                                record["STATE_ABBREV"] !== "US-Total");
+                                                record["STATE_ABBREV"] !== "US-Total" &&
+                                                record["STATE_ABBREV"] !== "US-TOTAL");
         console.log(data);
 
         let stateList = [...new Set(data.map(record => {return record.STATE_ABBREV }))];
