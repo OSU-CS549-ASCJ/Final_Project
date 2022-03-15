@@ -1,15 +1,17 @@
 <script>
 	import { onMount } from "svelte";
 	import * as d3 from "d3";
+	import { SelectedStatesAbbrv } from "../store.js"
+    import { SelectedYear } from "../store.js"
 
 	const totalSize = {w: 800, h: 400};
 	const margin = {top: 10, right: 200, bottom: 30, left: 60};
 	const width = totalSize.w - margin.left - margin.right;
 	const height = totalSize.h - margin.top - margin.bottom;
 	
-	export let selectedStates;
-	export let selectedYear;
-	export let selectedResource;
+	let selectedStates = $SelectedStatesAbbrv;
+	let selectedYear = $SelectedYear;
+	let selectedResource = "Natural Gas";
 
 	console.log(selectedYear);
 
@@ -20,7 +22,7 @@
 
 	onMount(async () => {
 
-		//Create the main svg plot, this part has to be put within the async section
+		//Create the main svg plot, this part has to be put within the async section 
 		let svg = d3.select("#chart")
 			.append("svg")
 				.attr("width", width + margin.left + margin.right)
