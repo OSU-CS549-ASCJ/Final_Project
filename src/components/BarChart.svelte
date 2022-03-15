@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { scaleLinear, scaleOrdinal } from "d3-scale";
-    import { SelectedStates } from "../store.js"
+    import { SelectedStatesAbbrv } from "../store.js"
     import { SelectedYear } from "../store.js"
 	export const myName = "Alexander Barajas-Ritchie";	
 
@@ -13,7 +13,7 @@
 	let colorScale;
 	let year_selected = $SelectedYear // 
     console.log($SelectedYear)
-	let states_selected = $SelectedStates // 
+	let states_selected = $SelectedStatesAbbrv // 
 	let selected_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
 								"Solar Thermal and Photovoltaic", "Other Biomass", "Wind", "Wood and Wood Derived Fuels"]
 	let all_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
@@ -27,8 +27,8 @@
 		instances = (await fetched.json());
 		
 		// filter by year and states
-		states_selected.forEach((state)=>{
-			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == year_selected && record.STATE == state; })})
+		$SelectedStatesAbbrv.forEach((state)=>{
+			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == year_selected && record.STATE_ABBREV == state; })})
 		})
 
 		// data transformation
@@ -45,7 +45,7 @@
 			let temp = []
 			unique.forEach((genType) => {
 				if(genType != "Total"){
-					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE == state_data.State;});
+					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE_ABBREV == state_data.State;});
 					let total = 0
 					temp_data.forEach((record) => {
 						total += record['GENERATION']
