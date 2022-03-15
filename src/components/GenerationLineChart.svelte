@@ -11,7 +11,7 @@
 	
 	let selectedStates = $SelectedStatesAbbrv;
 	let selectedYear = $SelectedYear;
-	let selectedResource = "Total";
+	let selectedResource = "Coal";
 
 	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 	let formatData = [];	//Contains each state's data as an element
@@ -89,6 +89,19 @@
     	svg.append("g")
       		.call(d3.axisLeft(yAxis));
 
+			//Naming of the chart
+			svg.append("text")
+				.attr("x", totalSize.w - 250)
+				.attr("y", 5)
+				.text("Year: " + selectedYear)
+				.style("font-size", "16px")
+				.attr("alignment-baseline","middle")
+		svg.append("text")
+				.attr("x", totalSize.w - 250)
+				.attr("y", 20)
+				.text("Resource: " + selectedResource)
+				.style("font-size", "16px")
+				.attr("alignment-baseline","middle")
 
 		//Create line and tooltip for each state data
 		let legendH = 50;
