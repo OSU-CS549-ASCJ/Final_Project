@@ -23,7 +23,7 @@
 		data = rawData.filter(record => record.YEAR == $SelectedYear && 
 												record["ENERGY SOURCE"] == selectedMapEnergySource &&
                                                 record["TYPE OF PRODUCER"] == "Total Electric Power Industry" &&
-                                                record["STATE_ABBREV"] !== "US-TOTAL");
+                                                record["STATE_ABBREV"] !== "US-Total");
         console.log(data);
 
         let stateList = [...new Set(data.map(record => {return record.STATE_ABBREV }))];
@@ -34,11 +34,15 @@
                 sum += month.GENERATION;
             });
             stateData.push({ abbrev: state, gen: sum });
+            console.log(stateData)
         });
 
+        console.log("Min is: " + Math.min(...stateData.map(state=>state.gen)));
+        console.log("Max is: " + Math.max(...stateData.map(state=>state.gen)));
         colorScale = scaleLinear()
             .domain([Math.min(...stateData.map(state=>state.gen)), Math.max(...stateData.map(state=>state.gen))])
             .range(["#eeeeee","#4682B4"]);
+        console.log(colorScale)
 	});
 </script>
 
@@ -51,6 +55,7 @@
             <g id="g5">
                 {#each mapData as path}
                     <path id={path.id} class={$SelectedStatesAbbrv.includes(path.id) ? "selected" : ""} d={path.d} fill={colorScale(stateData.find(state=>state.abbrev==path.id).gen)} on:click={() => {
+                        alert(stateData.find(state=>state.abbrev==path.id).gen)
                         if ($SelectedStatesAbbrv.includes(path.id)) {
                             let index = $SelectedStatesAbbrv.findIndex(state=>state==path.id);
                             $SelectedStatesAbbrv.splice(index, 1)
