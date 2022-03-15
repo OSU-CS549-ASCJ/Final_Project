@@ -130,6 +130,9 @@ var app = (function () {
     function add_render_callback(fn) {
         render_callbacks.push(fn);
     }
+    function add_flush_callback(fn) {
+        flush_callbacks.push(fn);
+    }
     // flush() calls callbacks in this order:
     // 1. All beforeUpdate callbacks, in order: parents before children
     // 2. All bind:this callbacks, in reverse order: children before parents.
@@ -226,6 +229,14 @@ var app = (function () {
         : typeof globalThis !== 'undefined'
             ? globalThis
             : global);
+
+    function bind(component, name, callback) {
+        const index = component.$$.props[name];
+        if (index !== undefined) {
+            component.$$.bound[index] = callback;
+            callback(component.$$.ctx[index]);
+        }
+    }
     function create_component(block) {
         block && block.c();
     }
@@ -24331,7 +24342,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			attr_dev(div, "id", "chart");
-    			add_location(div, file$2, 172, 0, 5361);
+    			add_location(div, file$2, 186, 0, 5703);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -24359,12 +24370,6 @@ var app = (function () {
     }
 
     function instance$2($$self, $$props, $$invalidate) {
-    	let $SelectedYear;
-    	let $SelectedStatesAbbrv;
-    	validate_store(SelectedYear, 'SelectedYear');
-    	component_subscribe($$self, SelectedYear, $$value => $$invalidate(2, $SelectedYear = $$value));
-    	validate_store(SelectedStatesAbbrv, 'SelectedStatesAbbrv');
-    	component_subscribe($$self, SelectedStatesAbbrv, $$value => $$invalidate(3, $SelectedStatesAbbrv = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('GenerationLineChart', slots, []);
     	const totalSize = { w: 800, h: 400 };
@@ -24378,9 +24383,10 @@ var app = (function () {
 
     	const width = totalSize.w - margin.left - margin.right;
     	const height = totalSize.h - margin.top - margin.bottom;
-    	let selectedStates = $SelectedStatesAbbrv;
-    	let selectedYear = $SelectedYear;
-    	let selectedResource = "Total";
+    	let { selectedStates } = $$props;
+    	let { selectedYear } = $$props;
+    	let { selectedResource } = $$props;
+    	console.log(selectedYear);
     	const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     	let formatData = []; //Contains each state's data as an element
     	let gMin = 9999999999; //The min and max for power generation
@@ -24432,6 +24438,11 @@ var app = (function () {
 
     		svg.append("g").call(axisLeft(yAxis));
 
+    		//Naming of the chart
+    		svg.append("text").attr("x", totalSize.w - 250).attr("y", 5).text("Power Generation by " + selectedYear + " from ").style("font-size", "16px").attr("alignment-baseline", "middle");
+
+    		svg.append("text").attr("x", totalSize.w - 250).attr("y", 20).text("From Resource " + selectedResource).style("font-size", "16px").attr("alignment-baseline", "middle");
+
     		//Create line and tooltip for each state data
     		let legendH = 50;
 
@@ -24463,17 +24474,21 @@ var app = (function () {
     		}
     	});
 
-    	const writable_props = [];
+    	const writable_props = ['selectedStates', 'selectedYear', 'selectedResource'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$1.warn(`<GenerationLineChart> was created with unknown prop '${key}'`);
     	});
 
+    	$$self.$$set = $$props => {
+    		if ('selectedStates' in $$props) $$invalidate(0, selectedStates = $$props.selectedStates);
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
+    	};
+
     	$$self.$capture_state = () => ({
     		onMount,
     		d3,
-    		SelectedStatesAbbrv,
-    		SelectedYear,
     		totalSize,
     		margin,
     		width,
@@ -24484,15 +24499,13 @@ var app = (function () {
     		months,
     		formatData,
     		gMin,
-    		gMax,
-    		$SelectedYear,
-    		$SelectedStatesAbbrv
+    		gMax
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('selectedStates' in $$props) selectedStates = $$props.selectedStates;
-    		if ('selectedYear' in $$props) selectedYear = $$props.selectedYear;
-    		if ('selectedResource' in $$props) selectedResource = $$props.selectedResource;
+    		if ('selectedStates' in $$props) $$invalidate(0, selectedStates = $$props.selectedStates);
+    		if ('selectedYear' in $$props) $$invalidate(1, selectedYear = $$props.selectedYear);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
     		if ('formatData' in $$props) formatData = $$props.formatData;
     		if ('gMin' in $$props) gMin = $$props.gMin;
     		if ('gMax' in $$props) gMax = $$props.gMax;
@@ -24502,13 +24515,18 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [];
+    	return [selectedStates, selectedYear, selectedResource];
     }
 
     class GenerationLineChart extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$1(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+    		init$1(this, options, instance$2, create_fragment$2, safe_not_equal, {
+    			selectedStates: 0,
+    			selectedYear: 1,
+    			selectedResource: 2
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -24516,6 +24534,45 @@ var app = (function () {
     			options,
     			id: create_fragment$2.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*selectedStates*/ ctx[0] === undefined && !('selectedStates' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedStates'");
+    		}
+
+    		if (/*selectedYear*/ ctx[1] === undefined && !('selectedYear' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedYear'");
+    		}
+
+    		if (/*selectedResource*/ ctx[2] === undefined && !('selectedResource' in props)) {
+    			console_1$1.warn("<GenerationLineChart> was created without expected prop 'selectedResource'");
+    		}
+    	}
+
+    	get selectedStates() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedStates(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedYear() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedYear(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get selectedResource() {
+    		throw new Error("<GenerationLineChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set selectedResource(value) {
+    		throw new Error("<GenerationLineChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -24557,7 +24614,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (128:4) {#if instances !== undefined}
+    // (130:4) {#if instances !== undefined}
     function create_if_block(ctx) {
     	let g0;
     	let text_1;
@@ -24615,23 +24672,23 @@ var app = (function () {
     			line0 = svg_element("line");
     			line1 = svg_element("line");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 129, 5, 3893);
+    			add_location(text_1, file$1, 131, 5, 3915);
     			attr_dev(g0, "transform", "translate(0, 10)");
-    			add_location(g0, file$1, 128, 4, 3854);
+    			add_location(g0, file$1, 130, 4, 3876);
     			attr_dev(line0, "class", "tick svelte-8xmk8");
     			attr_dev(line0, "x1", "220");
     			attr_dev(line0, "y1", "45");
     			attr_dev(line0, "x2", 650);
     			attr_dev(line0, "y2", "45");
-    			add_location(line0, file$1, 180, 5, 5523);
+    			add_location(line0, file$1, 182, 5, 5545);
     			attr_dev(line1, "class", "tick svelte-8xmk8");
     			attr_dev(line1, "x1", "220");
     			attr_dev(line1, "y1", 40);
     			attr_dev(line1, "x2", "220");
     			attr_dev(line1, "y2", "450");
-    			add_location(line1, file$1, 184, 5, 5601);
+    			add_location(line1, file$1, 186, 5, 5623);
     			attr_dev(g1, "transform", "translate(0, 70)");
-    			add_location(g1, file$1, 142, 4, 4309);
+    			add_location(g1, file$1, 144, 4, 4331);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g0, anchor);
@@ -24743,14 +24800,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(128:4) {#if instances !== undefined}",
+    		source: "(130:4) {#if instances !== undefined}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (131:5) {#each all_sources as source, index}
+    // (133:5) {#each all_sources as source, index}
     function create_each_block_4(ctx) {
     	let rect;
     	let rect_class_value;
@@ -24778,11 +24835,11 @@ var app = (function () {
     			? "selected_check"
     			: "not_checked") + " svelte-8xmk8"));
 
-    			add_location(rect, file$1, 131, 6, 3980);
+    			add_location(rect, file$1, 133, 6, 4002);
     			attr_dev(text_1, "x", "30");
     			attr_dev(text_1, "y", 10 * /*index*/ ctx[25] + 10);
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 138, 6, 4218);
+    			add_location(text_1, file$1, 140, 6, 4240);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, rect, anchor);
@@ -24815,14 +24872,14 @@ var app = (function () {
     		block,
     		id: create_each_block_4.name,
     		type: "each",
-    		source: "(131:5) {#each all_sources as source, index}",
+    		source: "(133:5) {#each all_sources as source, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (147:7) {#if selected_sources.includes(energy["Generation Type"])}
+    // (149:7) {#if selected_sources.includes(energy["Generation Type"])}
     function create_if_block_1(ctx) {
     	let g;
     	let rect;
@@ -24862,13 +24919,13 @@ var app = (function () {
     			attr_dev(rect, "width", rect_width_value = /*xScaleNew*/ ctx[1](/*energy*/ ctx[23].Sum));
     			attr_dev(rect, "height", "8");
     			set_style(rect, "fill", colorEnergy(/*energy*/ ctx[23]));
-    			add_location(rect, file$1, 148, 9, 4644);
+    			add_location(rect, file$1, 150, 9, 4666);
     			attr_dev(text_1, "x", "-30");
     			attr_dev(text_1, "y", "9");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 153, 9, 4852);
+    			add_location(text_1, file$1, 155, 9, 4874);
     			attr_dev(g, "transform", "translate(100, " + (/*index*/ ctx[25] * 10 + 50 + /*i*/ ctx[22] * 150) + ")");
-    			add_location(g, file$1, 147, 8, 4572);
+    			add_location(g, file$1, 149, 8, 4594);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -24928,14 +24985,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(147:7) {#if selected_sources.includes(energy[\\\"Generation Type\\\"])}",
+    		source: "(149:7) {#if selected_sources.includes(energy[\\\"Generation Type\\\"])}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (155:9) {#each xScaleTicks as tick}
+    // (157:9) {#each xScaleTicks as tick}
     function create_each_block_3(ctx) {
     	let line;
     	let line_x__value;
@@ -24949,7 +25006,7 @@ var app = (function () {
     			attr_dev(line, "y1", "0");
     			attr_dev(line, "x2", line_x__value_1 = 120 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[17]));
     			attr_dev(line, "y2", "5");
-    			add_location(line, file$1, 155, 10, 4966);
+    			add_location(line, file$1, 157, 10, 4988);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -24972,14 +25029,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(155:9) {#each xScaleTicks as tick}",
+    		source: "(157:9) {#each xScaleTicks as tick}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (146:6) {#each state.Totals as energy, index}
+    // (148:6) {#each state.Totals as energy, index}
     function create_each_block_2(ctx) {
     	let show_if = /*selected_sources*/ ctx[3].includes(/*energy*/ ctx[23]["Generation Type"]);
     	let if_block_anchor;
@@ -25020,14 +25077,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(146:6) {#each state.Totals as energy, index}",
+    		source: "(148:6) {#each state.Totals as energy, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (144:5) {#each generation_values as state, i}
+    // (146:5) {#each generation_values as state, i}
     function create_each_block_1(ctx) {
     	let text_1;
     	let t_value = /*state*/ ctx[20].State + "";
@@ -25054,7 +25111,7 @@ var app = (function () {
     			attr_dev(text_1, "x", "19");
     			attr_dev(text_1, "y", 60 + /*i*/ ctx[22] * 150);
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 144, 5, 4392);
+    			add_location(text_1, file$1, 146, 5, 4414);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, text_1, anchor);
@@ -25102,14 +25159,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(144:5) {#each generation_values as state, i}",
+    		source: "(146:5) {#each generation_values as state, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (170:5) {#each xScaleTicks as tick}
+    // (172:5) {#each xScaleTicks as tick}
     function create_each_block(ctx) {
     	let text_1;
     	let t_value = /*tick*/ ctx[17] + "";
@@ -25127,13 +25184,13 @@ var app = (function () {
     			attr_dev(text_1, "transform", text_1_transform_value = "translate(" + (220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[17])) + ", 40) rotate(-45)");
     			set_style(text_1, "font-size", "8");
     			attr_dev(text_1, "class", "svelte-8xmk8");
-    			add_location(text_1, file$1, 170, 6, 5245);
+    			add_location(text_1, file$1, 172, 6, 5267);
     			attr_dev(line, "class", "tick svelte-8xmk8");
     			attr_dev(line, "x1", line_x__value = 220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[17]));
     			attr_dev(line, "y1", "40");
     			attr_dev(line, "x2", line_x__value_1 = 220 + /*xScaleNew*/ ctx[1](/*tick*/ ctx[17]));
     			attr_dev(line, "y2", "45");
-    			add_location(line, file$1, 173, 6, 5372);
+    			add_location(line, file$1, 175, 6, 5394);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, text_1, anchor);
@@ -25165,7 +25222,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(170:5) {#each xScaleTicks as tick}",
+    		source: "(172:5) {#each xScaleTicks as tick}",
     		ctx
     	});
 
@@ -25189,13 +25246,13 @@ var app = (function () {
     			attr_dev(svg, "id", "visualization");
     			set_style(svg, "width", "1000px");
     			attr_dev(svg, "class", "svelte-8xmk8");
-    			add_location(svg, file$1, 126, 3, 3766);
+    			add_location(svg, file$1, 128, 3, 3788);
     			attr_dev(div0, "id", "sidebar");
     			attr_dev(div0, "class", "svelte-8xmk8");
-    			add_location(div0, file$1, 125, 2, 3742);
+    			add_location(div0, file$1, 127, 2, 3764);
     			attr_dev(div1, "id", "alex-view");
-    			add_location(div1, file$1, 122, 1, 3714);
-    			add_location(main, file$1, 121, 0, 3705);
+    			add_location(div1, file$1, 124, 1, 3736);
+    			add_location(main, file$1, 123, 0, 3727);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -25356,6 +25413,8 @@ var app = (function () {
     			});
     		});
 
+    		console.log(data);
+
     		// data transformation
     		data.forEach(state_data => {
     			let unique = [...new Set(state_data.records.map(item => item["ENERGY SOURCE"]))];
@@ -25394,7 +25453,8 @@ var app = (function () {
     			});
     		});
 
-    		//console.log(generation_values)
+    		console.log(generation_values);
+
     		// console.log(max)
     		$$invalidate(1, xScaleNew = linear$2().domain([0, max]).range([0, 400]));
 
@@ -25523,6 +25583,7 @@ var app = (function () {
     	let svg0;
     	let foreignObject0;
     	let generationmap;
+    	let updating_selectedYear;
     	let t4;
     	let div7;
     	let div4;
@@ -25531,6 +25592,8 @@ var app = (function () {
     	let svg1;
     	let foreignObject1;
     	let barchart;
+    	let updating_selectedYear_1;
+    	let updating_selectedStates;
     	let t7;
     	let div6;
     	let div5;
@@ -25538,15 +25601,84 @@ var app = (function () {
     	let svg2;
     	let foreignObject2;
     	let generationlinechart;
+    	let updating_selectedYear_2;
+    	let updating_selectedStates_1;
+    	let updating_selectedResource;
     	let current;
 
+    	function generationmap_selectedYear_binding(value) {
+    		/*generationmap_selectedYear_binding*/ ctx[3](value);
+    	}
+
+    	let generationmap_props = { height: "700", width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		generationmap_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
     	generationmap = new GenerationMap({
-    			props: { height: "700", width: "1000" },
+    			props: generationmap_props,
     			$$inline: true
     		});
 
-    	barchart = new BarChart({ props: { width: "1000" }, $$inline: true });
-    	generationlinechart = new GenerationLineChart({ props: { width: "1000" }, $$inline: true });
+    	binding_callbacks.push(() => bind(generationmap, 'selectedYear', generationmap_selectedYear_binding));
+
+    	function barchart_selectedYear_binding(value) {
+    		/*barchart_selectedYear_binding*/ ctx[4](value);
+    	}
+
+    	function barchart_selectedStates_binding(value) {
+    		/*barchart_selectedStates_binding*/ ctx[5](value);
+    	}
+
+    	let barchart_props = { width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		barchart_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
+    	if (/*selectedStates*/ ctx[1] !== void 0) {
+    		barchart_props.selectedStates = /*selectedStates*/ ctx[1];
+    	}
+
+    	barchart = new BarChart({ props: barchart_props, $$inline: true });
+    	binding_callbacks.push(() => bind(barchart, 'selectedYear', barchart_selectedYear_binding));
+    	binding_callbacks.push(() => bind(barchart, 'selectedStates', barchart_selectedStates_binding));
+
+    	function generationlinechart_selectedYear_binding(value) {
+    		/*generationlinechart_selectedYear_binding*/ ctx[6](value);
+    	}
+
+    	function generationlinechart_selectedStates_binding(value) {
+    		/*generationlinechart_selectedStates_binding*/ ctx[7](value);
+    	}
+
+    	function generationlinechart_selectedResource_binding(value) {
+    		/*generationlinechart_selectedResource_binding*/ ctx[8](value);
+    	}
+
+    	let generationlinechart_props = { width: "1000" };
+
+    	if (/*selectedYear*/ ctx[0] !== void 0) {
+    		generationlinechart_props.selectedYear = /*selectedYear*/ ctx[0];
+    	}
+
+    	if (/*selectedStates*/ ctx[1] !== void 0) {
+    		generationlinechart_props.selectedStates = /*selectedStates*/ ctx[1];
+    	}
+
+    	if (/*selectedResource*/ ctx[2] !== void 0) {
+    		generationlinechart_props.selectedResource = /*selectedResource*/ ctx[2];
+    	}
+
+    	generationlinechart = new GenerationLineChart({
+    			props: generationlinechart_props,
+    			$$inline: true
+    		});
+
+    	binding_callbacks.push(() => bind(generationlinechart, 'selectedYear', generationlinechart_selectedYear_binding));
+    	binding_callbacks.push(() => bind(generationlinechart, 'selectedStates', generationlinechart_selectedStates_binding));
+    	binding_callbacks.push(() => bind(generationlinechart, 'selectedResource', generationlinechart_selectedResource_binding));
 
     	const block = {
     		c: function create() {
@@ -25582,63 +25714,63 @@ var app = (function () {
     			create_component(generationlinechart.$$.fragment);
     			attr_dev(h1, "x", "50");
     			attr_dev(h1, "class", "svelte-1vez0ch");
-    			add_location(h1, file, 7, 1, 229);
+    			add_location(h1, file, 11, 1, 335);
     			attr_dev(div0, "class", "view-title svelte-1vez0ch");
-    			add_location(div0, file, 13, 4, 412);
+    			add_location(div0, file, 17, 4, 518);
     			attr_dev(foreignObject0, "height", "700");
     			attr_dev(foreignObject0, "width", "1000");
     			attr_dev(foreignObject0, "class", "svelte-1vez0ch");
-    			add_location(foreignObject0, file, 15, 4, 489);
+    			add_location(foreignObject0, file, 19, 4, 595);
     			attr_dev(svg0, "height", "700");
     			attr_dev(svg0, "width", "1000");
     			attr_dev(svg0, "class", "svelte-1vez0ch");
-    			add_location(svg0, file, 14, 4, 456);
+    			add_location(svg0, file, 18, 4, 562);
     			attr_dev(div1, "id", "projection-view");
     			attr_dev(div1, "height", "700");
     			attr_dev(div1, "class", "view-panel svelte-1vez0ch");
-    			add_location(div1, file, 12, 3, 350);
+    			add_location(div1, file, 16, 3, 456);
     			attr_dev(div2, "id", "map-view");
     			attr_dev(div2, "height", "700");
     			attr_dev(div2, "class", "svelte-1vez0ch");
-    			add_location(div2, file, 10, 2, 313);
+    			add_location(div2, file, 14, 2, 419);
     			attr_dev(div3, "class", "view-title svelte-1vez0ch");
     			attr_dev(div3, "y", "40");
-    			add_location(div3, file, 24, 4, 723);
+    			add_location(div3, file, 28, 4, 862);
     			attr_dev(foreignObject1, "height", "700");
     			attr_dev(foreignObject1, "width", "1000");
     			attr_dev(foreignObject1, "class", "svelte-1vez0ch");
-    			add_location(foreignObject1, file, 27, 5, 825);
+    			add_location(foreignObject1, file, 31, 5, 964);
     			attr_dev(svg1, "width", "1000");
     			attr_dev(svg1, "height", "500");
     			attr_dev(svg1, "class", "svelte-1vez0ch");
-    			add_location(svg1, file, 26, 4, 789);
+    			add_location(svg1, file, 30, 4, 928);
     			attr_dev(div4, "id", "generation-state-view");
     			attr_dev(div4, "class", "view-panel svelte-1vez0ch");
-    			add_location(div4, file, 23, 3, 666);
+    			add_location(div4, file, 27, 3, 805);
     			attr_dev(div5, "class", "view-title svelte-1vez0ch");
-    			add_location(div5, file, 34, 4, 1012);
+    			add_location(div5, file, 38, 4, 1221);
     			attr_dev(foreignObject2, "height", "700");
     			attr_dev(foreignObject2, "width", "1000");
     			attr_dev(foreignObject2, "class", "svelte-1vez0ch");
-    			add_location(foreignObject2, file, 36, 5, 1117);
+    			add_location(foreignObject2, file, 40, 5, 1326);
     			attr_dev(svg2, "width", "1000");
     			attr_dev(svg2, "height", "500");
     			attr_dev(svg2, "class", "svelte-1vez0ch");
-    			add_location(svg2, file, 35, 4, 1081);
+    			add_location(svg2, file, 39, 4, 1290);
     			attr_dev(div6, "id", "generation-state-resource-view");
     			attr_dev(div6, "class", "view-panel svelte-1vez0ch");
     			attr_dev(div6, "height", "400");
-    			add_location(div6, file, 32, 3, 931);
+    			add_location(div6, file, 36, 3, 1140);
     			attr_dev(div7, "id", "sub-section");
     			attr_dev(div7, "x", "80");
     			attr_dev(div7, "y", "80");
     			attr_dev(div7, "class", "svelte-1vez0ch");
-    			add_location(div7, file, 21, 2, 623);
+    			add_location(div7, file, 25, 2, 762);
     			attr_dev(div8, "id", "container");
     			attr_dev(div8, "class", "svelte-1vez0ch");
-    			add_location(div8, file, 8, 1, 287);
+    			add_location(div8, file, 12, 1, 393);
     			attr_dev(main, "class", "svelte-1vez0ch");
-    			add_location(main, file, 6, 0, 220);
+    			add_location(main, file, 10, 0, 326);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -25672,7 +25804,53 @@ var app = (function () {
     			mount_component(generationlinechart, foreignObject2, null);
     			current = true;
     		},
-    		p: noop$5,
+    		p: function update(ctx, [dirty]) {
+    			const generationmap_changes = {};
+
+    			if (!updating_selectedYear && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear = true;
+    				generationmap_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear = false);
+    			}
+
+    			generationmap.$set(generationmap_changes);
+    			const barchart_changes = {};
+
+    			if (!updating_selectedYear_1 && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear_1 = true;
+    				barchart_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear_1 = false);
+    			}
+
+    			if (!updating_selectedStates && dirty & /*selectedStates*/ 2) {
+    				updating_selectedStates = true;
+    				barchart_changes.selectedStates = /*selectedStates*/ ctx[1];
+    				add_flush_callback(() => updating_selectedStates = false);
+    			}
+
+    			barchart.$set(barchart_changes);
+    			const generationlinechart_changes = {};
+
+    			if (!updating_selectedYear_2 && dirty & /*selectedYear*/ 1) {
+    				updating_selectedYear_2 = true;
+    				generationlinechart_changes.selectedYear = /*selectedYear*/ ctx[0];
+    				add_flush_callback(() => updating_selectedYear_2 = false);
+    			}
+
+    			if (!updating_selectedStates_1 && dirty & /*selectedStates*/ 2) {
+    				updating_selectedStates_1 = true;
+    				generationlinechart_changes.selectedStates = /*selectedStates*/ ctx[1];
+    				add_flush_callback(() => updating_selectedStates_1 = false);
+    			}
+
+    			if (!updating_selectedResource && dirty & /*selectedResource*/ 4) {
+    				updating_selectedResource = true;
+    				generationlinechart_changes.selectedResource = /*selectedResource*/ ctx[2];
+    				add_flush_callback(() => updating_selectedResource = false);
+    			}
+
+    			generationlinechart.$set(generationlinechart_changes);
+    		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(generationmap.$$.fragment, local);
@@ -25708,19 +25886,75 @@ var app = (function () {
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
+    	let selectedYear = 2010;
+    	let selectedStates = ["OR", "WA"];
+    	let selectedResource = "Natural Gas";
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
+    	function generationmap_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function barchart_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function barchart_selectedStates_binding(value) {
+    		selectedStates = value;
+    		$$invalidate(1, selectedStates);
+    	}
+
+    	function generationlinechart_selectedYear_binding(value) {
+    		selectedYear = value;
+    		$$invalidate(0, selectedYear);
+    	}
+
+    	function generationlinechart_selectedStates_binding(value) {
+    		selectedStates = value;
+    		$$invalidate(1, selectedStates);
+    	}
+
+    	function generationlinechart_selectedResource_binding(value) {
+    		selectedResource = value;
+    		$$invalidate(2, selectedResource);
+    	}
+
     	$$self.$capture_state = () => ({
     		GenerationMap,
     		GenerationLineChart,
-    		BarChart
+    		BarChart,
+    		selectedYear,
+    		selectedStates,
+    		selectedResource
     	});
 
-    	return [];
+    	$$self.$inject_state = $$props => {
+    		if ('selectedYear' in $$props) $$invalidate(0, selectedYear = $$props.selectedYear);
+    		if ('selectedStates' in $$props) $$invalidate(1, selectedStates = $$props.selectedStates);
+    		if ('selectedResource' in $$props) $$invalidate(2, selectedResource = $$props.selectedResource);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [
+    		selectedYear,
+    		selectedStates,
+    		selectedResource,
+    		generationmap_selectedYear_binding,
+    		barchart_selectedYear_binding,
+    		barchart_selectedStates_binding,
+    		generationlinechart_selectedYear_binding,
+    		generationlinechart_selectedStates_binding,
+    		generationlinechart_selectedResource_binding
+    	];
     }
 
     class App extends SvelteComponentDev {

@@ -31,6 +31,8 @@
 			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == year_selected && record.STATE_ABBREV == state; })})
 		})
 
+		console.log(data);
+
 		// data transformation
 		data.forEach((state_data) => {
 
@@ -58,7 +60,7 @@
 			});
 			generation_values.push({"State": state_data.State, "Totals":temp})
 		});
-		//console.log(generation_values)
+		console.log(generation_values)
 		// console.log(max)
 		
 		
