@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from "svelte";
 	import { scaleLinear, scaleOrdinal } from "d3-scale";
+    import { SelectedStatesAbbrv } from "../store.js"
+    import { SelectedYear } from "../store.js"
 	export const myName = "Alexander Barajas-Ritchie";	
 
 
@@ -9,8 +11,9 @@
 	let xScaleNew;
 	let xScaleTicks = [];
 	let colorScale;
-	export let selectedYear; // 
-	export let selectedStates;
+	let year_selected = $SelectedYear // 
+    console.log($SelectedYear)
+	let states_selected = $SelectedStatesAbbrv // 
 	let selected_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
 								"Solar Thermal and Photovoltaic", "Other Biomass", "Wind", "Wood and Wood Derived Fuels"]
 	let all_sources = ["Coal", "Geothermal", "Hydroelectric Conventional", "Natural Gas", "Other", "Petroleum", 
@@ -24,8 +27,8 @@
 		instances = (await fetched.json());
 		
 		// filter by year and states
-		selectedStates.forEach((state)=>{
-			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == selectedYear && record.STATE_ABBREV == state; })})
+		$SelectedStatesAbbrv.forEach((state)=>{
+			data.push({"State": state,"records": instances.filter((record) => { return record.YEAR == year_selected && record.STATE_ABBREV == state; })})
 		})
 
 		console.log(data);
@@ -44,7 +47,7 @@
 			let temp = []
 			unique.forEach((genType) => {
 				if(genType != "Total"){
-					let temp_data = state_data.records.filter((element) => { return element["ENERGY SOURCE"] == genType && element.STATE_ABBREV == state_data.State;});
+					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE_ABBREV == state_data.State && data.YEAR == year_selected;});
 					let total = 0
 					temp_data.forEach((record) => {
 						total += record['GENERATION']
@@ -148,7 +151,8 @@
 									<rect class="bar" x= "120" y="0" 
 										width={xScaleNew(energy.Sum)}
 										height = "8"	
-										style="fill: {colorEnergy(energy)}" />
+										style="fill: {colorEnergy(energy)}" 
+										on:click={() => {alert(energy.Sum)}}/>
 									<text x= "-30" y = "9"> {energy["Generation Type"]}</text>
 									{#each xScaleTicks as tick}						
 										<line class="tick"
