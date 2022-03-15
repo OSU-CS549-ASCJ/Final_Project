@@ -45,7 +45,7 @@
 			let temp = []
 			unique.forEach((genType) => {
 				if(genType != "Total"){
-					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE_ABBREV == state_data.State;});
+					let temp_data = instances.filter((data) => { return data["ENERGY SOURCE"] == genType && data.STATE_ABBREV == state_data.State && data.YEAR == year_selected;});
 					let total = 0
 					temp_data.forEach((record) => {
 						total += record['GENERATION']
@@ -149,7 +149,8 @@
 									<rect class="bar" x= "120" y="0" 
 										width={xScaleNew(energy.Sum)}
 										height = "8"	
-										style="fill: {colorEnergy(energy)}" />
+										style="fill: {colorEnergy(energy)}" 
+										on:click={() => {alert(energy.Sum)}}/>
 									<text x= "-30" y = "9"> {energy["Generation Type"]}</text>
 									{#each xScaleTicks as tick}						
 										<line class="tick"

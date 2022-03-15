@@ -56,7 +56,6 @@
             <g id="g5">
                 {#each mapData as path}
                     <path id={path.id} class={$SelectedStatesAbbrv.includes(path.id) ? "selected" : ""} d={path.d} fill={colorScale(stateData.find(state=>state.abbrev==path.id).gen)} on:click={() => {
-                        alert(stateData.find(state=>state.abbrev==path.id).gen)
                         if ($SelectedStatesAbbrv.includes(path.id)) {
                             let index = $SelectedStatesAbbrv.findIndex(state=>state==path.id);
                             $SelectedStatesAbbrv.splice(index, 1)
